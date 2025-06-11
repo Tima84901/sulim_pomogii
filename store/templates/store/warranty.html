@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Подключение FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css ">
+
+<style>
+    .guarantee-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+
+    .timeline-item:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        left: 20px;
+        top: 30px;
+        height: calc(100% - 30px);
+        width: 2px;
+        background-color: #e5e7eb;
+    }
+</style>
+
+<!-- Основной контент -->
+<main class="container mt-5">
+    <!-- Заголовок -->
+    <div class="text-center mb-12">
+        <h1 class="h1 fw-bold">Гарантия и возврат товаров</h1>
+        <p class="lead text-muted mt-3">Мы гарантируем качество всех товаров в нашем магазине и предлагаем удобные условия возврата</p>
+    </div>
+
+    <!-- Карточки гарантий -->
+    <div class="row g-4 mb-5 justify-content-center">
+        <div class="col-md-4 guarantee-card">
+            <div class="card shadow-sm h-100 border-0 rounded-3 p-4 text-center">
+                <i class="fas fa-shield-alt text-primary display-5 mb-3"></i>
+                <h3 class="h5 fw-semibold mb-2">Гарантия качества</h3>
+                <p class="text-muted">Все товары проходят тщательную проверку перед отправкой и имеют официальную гарантию производителя.</p>
+            </div>
+        </div>
+        <div class="col-md-4 guarantee-card">
+            <div class="card shadow-sm h-100 border-0 rounded-3 p-4 text-center">
+                <i class="fas fa-exchange-alt text-primary display-5 mb-3"></i>
+                <h3 class="h5 fw-semibold mb-2">Легкий возврат</h3>
+                <p class="text-muted">Вы можете вернуть товар в течение 14 дней без объяснения причин, если он не был в употреблении.</p>
+            </div>
+        </div>
+        <div class="col-md-4 guarantee-card">
+            <div class="card shadow-sm h-100 border-0 rounded-3 p-4 text-center">
+                <i class="fas fa-headset text-primary display-5 mb-3"></i>
+                <h3 class="h5 fw-semibold mb-2">Поддержка 24/7</h3>
+                <p class="text-muted">Наша служба поддержки всегда готова помочь с вопросами по гарантии и возврату в любое время.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Раздел с гарантией -->
+    <section class="mb-5">
+        <div class="card border-0 shadow-sm">
+            <div class="row g-0">
+                <div class="col-md-4 bg-primary d-flex align-items-center p-4 text-white">
+                    <div>
+                        <h2 class="h4 fw-bold">Гарантийные обязательства</h2>
+                        <p>Мы предоставляем гарантию на все товары в соответствии с законодательством и требованиями производителей.</p>
+                    </div>
+                </div>
+                <div class="col-md-8 p-4">
+                    <div class="mb-4">
+                        <h3 class="h6 fw-semibold">Сроки гарантии</h3>
+                        <p class="text-muted">Стандартный срок гарантии составляет 12 месяцев с момента покупки. Для некоторых категорий товаров (например, техники Apple) гарантия может составлять 24 месяца.</p>
+                    </div>
+                    <div class="mb-4">
+                        <h3 class="h6 fw-semibold">Условия гарантии</h3>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex align-items-center"><i class="fas fa-check-circle text-success me-2"></i> Гарантия распространяется на производственные дефекты</li>
+                            <li class="list-group-item d-flex align-items-center"><i class="fas fa-times-circle text-danger me-2"></i> Гарантия не распространяется на повреждения, вызванные неправильной эксплуатацией</li>
+                            <li class="list-group-item d-flex align-items-center"><i class="fas fa-file-invoice text-primary me-2"></i> Для активации гарантии необходимо сохранить упаковку и документы</li>
+                            <li class="list-group-item d-flex align-items-center"><i class="fas fa-tools text-primary me-2"></i> Гарантийный ремонт осуществляется авторизованными сервисными центрами</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="h6 fw-semibold">Как воспользоваться гарантией?</h3>
+                        <p class="text-muted">При обнаружении дефекта обратитесь в нашу службу поддержки с чеком и описанием проблемы. Мы организуем доставку товара в сервисный центр или предложим замену.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Раздел с возвратом -->
+    <section class="mb-5">
+        <h2 class="text-center h3 fw-bold mb-4">Условия возврата товара</h2>
+        <div class="max-w-3xl mx-auto">
+            <div class="d-flex flex-column position-relative">
+                <!-- Элемент таймлайна -->
+                <div class="position-relative ps-5 pb-4">
+                    <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-primary">1</span>
+                    <h3 class="h6 fw-semibold">Подача заявления</h3>
+                    <p class="text-muted">Заполните форму возврата на нашем сайте или обратитесь в службу поддержки в течение 14 дней с момента получения товара.</p>
+                </div>
+                <div class="position-relative ps-5 pb-4">
+                    <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-primary">2</span>
+                    <h3 class="h6 fw-semibold">Подготовка товара</h3>
+                    <p class="text-muted">Упакуйте товар в оригинальную упаковку со всеми аксессуарами и документами. Товар должен быть в идеальном состоянии без следов использования.</p>
+                </div>
+                <div class="position-relative ps-5 pb-4">
+                    <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-primary">3</span>
+                    <h3 class="h6 fw-semibold">Отправка товара</h3>
+                    <p class="text-muted">Мы вышлем курьера для бесплатного забора товара или предоставим адрес для самостоятельной отправки (в этом случае стоимость доставки компенсируем).</p>
+                </div>
+                <div class="position-relative ps-5">
+                    <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-primary">4</span>
+                    <h3 class="h6 fw-semibold">Получение денег</h3>
+                    <p class="text-muted">После проверки товара мы вернем деньги на вашу карту в течение 3-5 рабочих дней или предложим замену на аналогичный товар.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mb-5">
+        <h2 class="text-center h3 fw-bold mb-4">Частые вопросы</h2>
+        <div class="accordion" id="faqAccordion">
+            <!-- Вопрос 1 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                        Какой срок возврата денег после отправки товара?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        После получения и проверки товара нашим отделом качества, возврат денежных средств осуществляется в течение 3-5 рабочих дней на карту, с которой была совершена оплата. В случае оплаты наличными, возврат производится по указанным вами реквизитам.
+                    </div>
+                </div>
+            </div>
+            <!-- Вопрос 2 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                        Можно ли обменять товар, а не возвращать деньги?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Да, вы можете обменять товар на аналогичный или другой товар из нашего ассортимента с перерасчетом стоимости. Для этого при оформлении возврата укажите, что хотите произвести обмен, и наш менеджер свяжется с вами для уточнения деталей.
+                    </div>
+                </div>
+            </div>
+            <!-- Вопрос 3 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                        Что делать, если товар поврежден при доставке?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Если вы получили поврежденный товар, немедленно свяжитесь с нашей службой поддержки, желательно в течение 24 часов с момента получения. Сохраните все упаковочные материалы и сделайте фотографии повреждений. Мы организуем замену товара или возврат денег без необходимости отправки поврежденного товара обратно.
+                    </div>
+                </div>
+            </div>
+            <!-- Вопрос 4 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                        Распространяется ли гарантия на расходные материалы?
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Гарантия на расходные материалы (например, батареи, картриджи, лампы) обычно составляет 6 месяцев, если иное не указано производителем. Это связано с естественным износом таких компонентов в процессе эксплуатации.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA блок -->
+    <section class="bg-primary text-white rounded-3 p-4 text-center">
+        <h2 class="h4 fw-bold mb-3">Остались вопросы?</h2>
+        <p class="mb-4">Наша служба поддержки всегда готова помочь вам с любыми вопросами по гарантии и возврату товаров.</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="#" class="btn btn-light">
+                <i class="fas fa-phone me-2"></i> Позвонить нам
+            </a>
+            <a href="#" class="btn btn-outline-light">
+                <i class="fas fa-envelope me-2"></i> Написать письмо
+            </a>
+        </div>
+    </section>
+</main>
+
+<script>
+    // Аккордеон для FAQ
+    document.querySelectorAll('.accordion-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const icon = button.querySelector('i');
+            if (button.classList.contains('collapsed')) {
+                icon?.classList.replace('fa-chevron-up', 'fa-chevron-down');
+            } else {
+                icon?.classList.replace('fa-chevron-down', 'fa-chevron-up');
+            }
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+/* Используем пространство имен для изоляции стилей */
+.about-page {
+    --primary: #64748b; /* Нейтральный серый */
+    --accent: #2563eb;  /* Синий акцент */
+    --light: #f8fafc;
+}
+
+.about-section {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.about-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin: 25px 0;
+    padding: 20px;
+    transition: transform 0.2s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-3px);
+}
+
+.about-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-bottom: 3px solid var(--accent);
+    margin-bottom: 15px;
+}
+
+.about-card h2 {
+    color: var(--primary);
+    font-size: 2rem; /* Увеличенный шрифт для заголовков */
+    margin-bottom: 15px;
+    padding-left: 20px;
+    position: relative;
+}
+
+.about-card h2::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+}
+
+.about-card p {
+    font-size: 1.2rem; /* Увеличенный шрифт для текста */
+    line-height: 1.7;
+    color: #475569;
+}
+
+.payment-methods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.payment-item {
+    background: #f1f5f9;
+    padding: 15px 20px;
+    border-radius: 8px;
+    text-align: center;
+    flex: 1 1 200px;
+    min-width: 180px;
+}
+
+.payment-item h3 {
+    margin-bottom: 8px;
+    color: var(--primary);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="about-page">
+    <div class="about-section">
+        <!-- Раздел "О нас" без картинки -->
+        <div class="about-card">
+            <h2>О нас</h2>
+            <p>ИП Бечуркаева — надежный поставщик компьютерных комплектующих с 2010 года. Мы предлагаем широкий ассортимент материнских плат, видеокарт, процессоров, оперативной памяти и других компонентов. Наша цель — обеспечить вас качественными товарами по доступным ценам.</p>
+        </div>
+
+        <!-- Раздел "Миссия и ценности" -->
+        <div class="about-card">
+            <img src="{% static 'store/images/cdb99a83-64ce-472b-a267-2954f80027f7.jpg' %}" alt="Миссия и ценности">
+            <h2>Миссия и ценности</h2>
+            <p>Наша миссия — предоставлять качественные комплектующие, которые улучшат ваш пользовательский опыт. Мы ценим честность, надежность и заботу о клиентах. Ваше удовлетворение — наш приоритет.</p>
+        </div>
+
+        <!-- Новый раздел "Способы оплаты" -->
+        <div class="about-card">
+
+            <h2>Способы оплаты</h2>
+            <div class="payment-methods">
+                <div class="payment-item">
+                    <h3>Банковские карты</h3>
+                    <p>Принимаем к оплате карты Visa, Mastercard, МИР</p>
+                </div>
+                <div class="payment-item">
+                    <h3>Электронные кошельки</h3>
+                    <p>Оплата через WebMoney, Яндекс.Деньги, Qiwi</p>
+                </div>
+                <div class="payment-item">
+                    <h3>Наложенный платеж</h3>
+                    <p>Оплата при получении заказа</p>
+                </div>
+                <div class="payment-item">
+                    <h3>Безналичный расчет</h3>
+                    <p>Для юридических лиц и ИП</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Раздел "Партнеры" -->
+        <div class="about-card">
+            <img src="{% static 'images/about-partners.jpg' %}" alt="Партнеры">
+            <h2>Партнеры</h2>
+            <p>Сотрудничаем с ведущими брендами: ASUS, NVIDIA, Intel, Samsung. Это гарантирует качество продукции и надежное обслуживание.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

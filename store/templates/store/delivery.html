@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Подключение иконок -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css ">
+
+<style>
+    .delivery-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .delivery-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+
+    .timeline-item:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        left: 20px;
+        top: 30px;
+        height: calc(100% - 30px);
+        width: 2px;
+        background-color: #e5e7eb;
+    }
+
+    /* Кастомные классы под синий цвет */
+    .text-primary-custom {
+        color: #0d6efd;
+    }
+
+    .bg-primary-custom {
+        background-color: #0d6efd;
+    }
+
+    .bg-primary-custom-light {
+        background-color: #dbeafe;
+    }
+
+    .text-primary-custom-dark {
+        color: #0b5ed7;
+    }
+
+    .border-primary-custom {
+        border-color: #0d6efd !important;
+    }
+
+    .btn-outline-primary-custom {
+        color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+    .btn-outline-primary-custom:hover {
+        background-color: #0d6efd;
+        color: white;
+    }
+</style>
+
+<!-- Основной контент -->
+<main class="container mt-5">
+    <!-- Заголовок -->
+    <div class="text-center mb-5">
+        <h1 class="h2 fw-bold">Доставка товаров</h1>
+        <p class="lead text-muted">Мы предлагаем быструю и надежную доставку по всей стране и за рубеж</p>
+    </div>
+
+    <!-- Карточки способов доставки -->
+    <div class="row g-4 mb-5 justify-content-center">
+        <div class="col-md-4 delivery-card">
+            <div class="card shadow-sm h-100 border-0 rounded-3 p-4 text-center">
+                <i class="fas fa-truck text-primary-custom display-5 mb-3"></i>
+                <h3 class="h5 fw-semibold mb-2">Курьерская доставка</h3>
+                <p class="text-muted">Быстрая доставка курьером до двери по городу и области. Срок — от 1 дня.</p>
+            </div>
+        </div>
+        <div class="col-md-4 delivery-card">
+            <div class="card shadow-sm h-100 border-0 rounded-3 p-4 text-center">
+                <i class="fas fa-box-open text-primary-custom display-5 mb-3"></i>
+                <h3 class="h5 fw-semibold mb-2">Самовывоз</h3>
+                <p class="text-muted">Вы можете забрать товар самостоятельно из одного из наших пунктов выдачи без предоплаты.</p>
+            </div>
+        </div>
+        <div class="col-md-4 delivery-card">
+            <div class="card shadow-sm h-100 border-0 rounded-3 p-4 text-center">
+                <i class="fas fa-globe text-primary-custom display-5 mb-3"></i>
+                <h3 class="h5 fw-semibold mb-2">Международная доставка</h3>
+                <p class="text-muted">Доставляем заказы за границу через проверенные логистические компании.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Условия доставки -->
+    <section class="mb-5">
+        <div class="row align-items-center g-4">
+            <div class="col-md-6 d-none d-md-block">
+                <img src="https://via.placeholder.com/500x300?text=Fast+Delivery " alt="Доставка" class="rounded-3 w-100 shadow-sm">
+            </div>
+            <div class="col-md-6">
+                <h2 class="h4 fw-bold mb-3">Условия доставки</h2>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex align-items-center"><i class="fas fa-check-circle text-success me-2"></i> Доставка по РФ и ближнему зарубежью</li>
+                    <li class="list-group-item d-flex align-items-center"><i class="fas fa-clock text-primary me-2"></i> Среднее время доставки — 2–5 дней</li>
+                    <li class="list-group-item d-flex align-items-center"><i class="fas fa-barcode text-primary me-2"></i> Отслеживание заказа в онлайн-режиме</li>
+                    <li class="list-group-item d-flex align-items-center"><i class="fas fa-shield-alt text-primary me-2"></i> Гарантия сохранности упаковки</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Этапы доставки -->
+    <section class="mb-5">
+        <h2 class="text-center h4 fw-bold mb-4">Как происходит доставка?</h2>
+        <div class="position-relative ps-5 pb-4">
+            <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-primary-custom-light text-primary-custom">1</span>
+            <h3 class="h6 fw-semibold">Оформление заказа</h3>
+            <p class="text-muted">Выберите товары, укажите адрес и способ доставки, оплатите заказ онлайн или при получении.</p>
+        </div>
+        <div class="position-relative ps-5 pb-4">
+            <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-primary-custom-light text-primary-custom">2</span>
+            <h3 class="h6 fw-semibold">Подготовка к отправке</h3>
+            <p class="text-muted">Мы собираем заказ, проверяем комплектацию и упаковываем товары с заботой о сохранности.</p>
+        </div>
+        <div class="position-relative ps-5 pb-4">
+            <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-primary-custom-light text-primary-custom">3</span>
+            <h3 class="h6 fw-semibold">Доставка</h3>
+            <p class="text-muted">Заказ передается в службу доставки. Мы выбираем надежных партнеров, чтобы минимизировать сроки.</p>
+        </div>
+        <div class="position-relative ps-5">
+            <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-primary-custom-light text-primary-custom">4</span>
+            <h3 class="h6 fw-semibold">Получение</h3>
+            <p class="text-muted">Вы получаете заказ и подтверждаете его успешное выполнение. Возможность примерки и частичного отказа.</p>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mb-5">
+        <h2 class="text-center h4 fw-bold mb-4">Частые вопросы</h2>
+        <div class="accordion" id="faqAccordion">
+            <!-- Вопрос 1 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                        Как узнать точные сроки доставки?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        После оформления заказа вы получите email с информацией о сроках и трек-номером для отслеживания. Также можно связаться с нашим менеджером.
+                    </div>
+                </div>
+            </div>
+            <!-- Вопрос 2 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                        Можно ли изменить адрес доставки после оформления заказа?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Если заказ еще не передан в доставку, мы можем изменить адрес бесплатно. Напишите нам как можно скорее, и мы внесем изменения.
+                    </div>
+                </div>
+            </div>
+            <!-- Вопрос 3 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                        Что делать, если заказ пришел поврежденным?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        При обнаружении повреждений сразу сообщите курьеру и сделайте фото. Мы организуем замену или возврат без необходимости возврата товара.
+                    </div>
+                </div>
+            </div>
+            <!-- Вопрос 4 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                        Есть ли возможность доставки в выходные?
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Да, большинство наших партнеров работают в выходные и праздничные дни. Уточняйте при оформлении заказа или в чате с менеджером.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA блок -->
+    <section class="bg-primary-custom text-white rounded-3 p-4 text-center mb-5">
+        <h2 class="h5 fw-bold mb-3">Нужна помощь с доставкой?</h2>
+        <p class="mb-4">Наши специалисты всегда готовы помочь вам с любыми вопросами по доставке товаров.</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="#" class="btn btn-light">
+                <i class="fas fa-phone me-2"></i> Позвонить нам
+            </a>
+            <a href="#" class="btn btn-outline-light">
+                <i class="fas fa-envelope me-2"></i> Написать письмо
+            </a>
+        </div>
+    </section>
+
+</main>
+
+<script>
+    // Аккордеон для FAQ
+    document.querySelectorAll('.accordion-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const icon = button.querySelector('i');
+            if (button.classList.contains('collapsed')) {
+                icon?.classList.replace('fa-chevron-up', 'fa-chevron-down');
+            } else {
+                icon?.classList.replace('fa-chevron-down', 'fa-chevron-up');
+            }
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,657 @@
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link type="text/css" href="{% static 'store/css/style.css' %}" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <title>{{ title }}</title>
+    <style>
+        .navbar-nav .nav-link {
+            font-size: 1.5rem; /* Увеличение размера текста для ссылок */
+        }
+        .form-control {
+            height: 50px; /* Увеличение высоты строки поиска */
+            font-size: 1.25rem; /* Увеличение размера текста в строке поиска */
+        }
+        .btn {
+            height: 50px; /* Увеличение высоты кнопок */
+            font-size: 1.25rem; /* Увеличение размера текста на кнопках */
+        }
+        .bi {
+            font-size: 1.5rem; /* Увеличение размера иконок */
+        }
+        .container {
+        padding-top:50px;
+        }
+<!--   это мой код-->
+        .gpu {
+        margin-top:40px;
+
+        }
+        .gpu_img {
+        margin-top:20px;
+        margin-bottom:10px;
+        }
+        .card-title {
+        text-align:center;
+        }
+        .bp_img {
+        margin-top:30px;
+        margin-left:10px;
+        margin-bottom:17px;
+        }
+        .motherboard_img {
+        margin-top:20px;
+        height:260px;
+        margin-bottom:15px;
+        }
+        .bottom-cart {
+        height:350px;
+        margin-top:40px;
+        }
+        .cpu_img {
+        width:240px;
+        margin-left:33px;
+        margin-top:21px;
+
+        }
+        .screen_img {
+        width:270px;
+        margin-top:10px;
+        margin-left:15px;
+        }
+    </style>
+</head>
+<body>
+<header>
+
+
+<ul class="nav justify-content-center">
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="#">Active</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Link</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Link</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+  </li>
+    </ul>
+
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid justify-content-center">
+            <a class="navbar-brand d-lg-none" href="#">Logo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="d-flex flex-fill justify-content-center align-items-center gap-3 w-100">
+
+                    <!-- Левая группа -->
+                    <ul class="navbar-nav me-3">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Products</a>
+                        </li>
+                    </ul>
+
+                    <!-- Центральный поиск -->
+                    <div style="max-width:800px;width: 100%;margin-top: 15px;padding-top:5px;">
+                        <form class="d-flex w-100 mx-auto">
+                            <input class="form-control me-2" type="search" placeholder="Search...">
+                            <button class="btn btn-outline-primary" type="submit">Find</button>
+                        </form>
+                    </div>
+
+                    <!-- Правая группа -->
+                    <ul class="navbar-nav ms-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="bi bi-person"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="bi bi-cart"></i></a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Навигация -->
+
+</header>
+
+
+
+
+<div class="container">
+  <div id="carouselExampleCaptions" class="carousel slide">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="static/store/images/pk2.jpg" class="d-block w-100" alt="..." height="730">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Игровой клмпьютер</h5>
+          <p>2 ГИГА 2 ЯДРА игровая видеокарта</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="static/store/images/pk1.jpg" class="d-block w-100" alt="..." height="730">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Я бы дешевле собрал</h5>
+          <p>I5-12400F, Rtx 3070 ti</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="static/store/images/pk.jpg" class="d-block w-100" alt="..." height="730">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Мощнее, чем у Куплинова</h5>
+          <p>i9-14900KF, Gtx 1080ti</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
+<!--курусель-->
+
+<div class="catalog">
+    <h1 style="text-align: center; margin:30px;">Категория товаров</h1>
+</div>
+
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-3 mb-4">  <!-- Изменено на col-md-3 для уменьшения ширины -->
+            <div class="card h-100">
+                <img src="static/store/images/vid.jpg" class="card-img-top gpu_img" alt="..." width="100px" height="270">
+                <div class="card-body gpu">
+                    <h5 class="card-title">Видеокарты</h5>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="static/store/images/1481470.jpg" class="card-img-top" alt="..." height="300" width="200">
+                <div class="card-body">
+                    <h5 class="card-title">Система охлаждения</h5>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="static/store/images/aw.jpg" class="card-img-top bp_img" alt="..." height="250">
+                <div class="card-body">
+                    <h5 class="card-title bp"><a href="as.html">Блоки питания</a></h5>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="static/store/images/mat.jpg" class="card-img-top motherboard_img" alt="..." height="250">
+                <div class="card-body">
+                    <h5 class="card-title">Материнские платы</h5>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4 bottom-cart">
+            <div class="card h-100">
+                <img src="static/store/images/1599747675_1576657.jpg" class="card-img-top" alt="..." height="280">
+                <div class="card-body">
+                    <h5 class="card-title">SSD диски</h5>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4 bottom-cart">
+            <div class="card h-100">
+                <img src="static/store/images/a.jpg" class="card-img-top cpu_img" alt="..." height="260" width="200">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="vid.html">Процессоры</a></h5>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4 bottom-cart">
+            <div class="card h-100">
+                <img src="static/store/images/case_march_2020_001.jpg" class="card-img-top" alt="..." height="283">
+                <div class="card-body">
+                    <h5 class="card-title">Корпусы</h5>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4 bottom-cart">
+            <div class="card h-100">
+                <img src="static/store/images/m.jpg" class="card-img-top screen_img" alt="..." height="280">
+                <div class="card-body">
+                    <h5 class="card-title">Мониторы</h5>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+
+
+
+  <!-- Footer -->
+  <footer class="text-center text-white" style="background-color: #212121; width: 100%; position: relative; left: 0;">
+    <!-- Grid container -->
+    <div class="container">
+      <!-- Section: Links -->
+      <section class="mt-5">
+        <!-- Grid row-->
+        <div class="row text-center d-flex justify-content-center pt-5">
+          <!-- Grid column -->
+          <div class="col-md-2">
+            <h6 class="text-uppercase font-weight-bold">
+              <a href="#!" class="text-white">About us</a>
+            </h6>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-2">
+            <h6 class="text-uppercase font-weight-bold">
+              <a href="#!" class="text-white">Products</a>
+            </h6>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-2">
+            <h6 class="text-uppercase font-weight-bold">
+              <a href="#!" class="text-white">Awards</a>
+            </h6>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-2">
+            <h6 class="text-uppercase font-weight-bold">
+              <a href="#!" class="text-white">Help</a>
+            </h6>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-2">
+            <h6 class="text-uppercase font-weight-bold">
+              <a href="#!" class="text-white">Contact</a>
+            </h6>
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row-->
+      </section>
+      <!-- Section: Links -->
+
+      <hr class="my-5" />
+
+      <!-- Section: Text -->
+      <section class="mb-5">
+        <div class="row d-flex justify-content-center">
+          <div class="col-lg-8">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
+              distinctio earum repellat quaerat voluptatibus placeat nam,
+              commodi optio pariatur est quia magnam eum harum corrupti
+              dicta, aliquam sequi voluptate quas.
+            </p>
+          </div>
+        </div>
+      </section>
+      <!-- Section: Text -->
+
+      <!-- Section: Social -->
+      <section class="text-center mb-5">
+        <a href="" class="text-white me-4">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-google"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-github"></i>
+        </a>
+      </section>
+      <!-- Section: Social -->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div
+         class="text-center p-3"
+         style="background-color: rgba(0, 0, 0, 0.7);"
+         >
+      © 2020 Copyright:
+      <a class="text-white" href="https://mdbootstrap.com/"
+         >MDBootstrap.com</a
+        >
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
+
+
+</html>
+
+
+
+<div class="row">
+  {% for product in products %}
+  <div class="col-12 mb-4">
+    <div class="bg-white rounded shadow position-relative card-hover d-flex align-items-center p-4" style="min-height: 200px;">
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid me-4" style="width: 200px; height: auto; border-radius: 8px;" />
+      <div class="flex-grow-1 d-flex flex-column justify-content-between h-100">
+        <div>
+          <h3 class="h5 mb-2">{{ product.name }}</h3>
+          <p class="text-muted mb-3" style="max-width: 600px;">{{ product.description }}</p>
+          <div class="mb-3">
+            <span class="badge bg-primary me-2">{{ product.memory }} ГБ GDDR6</span>
+            <span class="badge bg-success me-2">{{ product.pci }} PCI-E</span>
+            <span class="badge bg-secondary me-2">{{ product.fans }} вентилятора</span>
+            <span class="badge bg-info text-dark">{{ product.ray_tracing }}</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="text-warning" style="font-size: 1.1rem;">
+            {% for i in "12345" %}
+              <i class="fas fa-star"></i>
+            {% endfor %}
+            <span class="text-muted small ms-2">{{ product.rating }}</span>
+          </div>
+          <div class="price-tag fs-5 fw-bold">{{ product.price }} ₽</div>
+          <button class="btn btn-primary btn-sm px-4">
+            <i class="fas fa-shopping-cart me-1"></i> Купить
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+Найти еще
+
+static/store/images/5970227.png
+
+{% for i in gpu %}
+  <div class="col-12 mb-4">
+    <div class="bg-white rounded shadow position-relative card-hover d-flex align-items-center p-4" style="min-height: 200px;">
+      <img
+        src="{{ i.image.url }}"
+        alt="Видеокарта"
+        class="img-fluid me-4"
+        style="width: 250px; height: auto; border-radius: 8px;"/>
+      <div class="flex-grow-1 d-flex flex-column justify-content-between h-100">
+        <div>
+          <h3 class="h5 mb-2">{{i.gpu_brand}} {{i.product_name}}</h3>
+          <p class="text-muted mb-3" style="max-width: 600px;">
+            {{i.pci}}, {{i.vram_type}}, {{i.vram}}, {{i.memory_interface}}, {{i.output_type}}, {{i.gpu_clock}} МГц
+          </p>
+          <div class="mb-3">
+            <span class="badge bg-primary me-2">RTX</span>
+            <span class="badge bg-success me-2">DLSS</span>
+            <span class="badge bg-secondary me-2">V-sync</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="text-warning" style="font-size: 1.1rem;">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+            <span class="text-muted small ms-2">4.7</span>
+          </div>
+          <div class="price-tag fs-5 fw-bold">{{i.price}} ₽</div>
+          <button class="btn btn-primary btn-sm px-4">
+            <i class="fas fa-shopping-cart me-1"></i> Купить
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+
+Найти еще
+
+from django.shortcuts import render
+from .models import Gpu
+from .forms import GpuFilterForm
+
+def gpu_list(request):
+    form = GpuFilterForm(request.GET or None)
+    gpus = Gpu.objects.all()
+
+    if form.is_valid():
+        search = form.cleaned_data.get('search')
+        memory = form.cleaned_data.get('memory')
+        interface = form.cleaned_data.get('interface')
+        fans = form.cleaned_data.get('fans')
+
+        if search:
+            gpus = gpus.filter(name__icontains=search)
+
+        if memory:
+            gpus = gpus.filter(memory__in=memory)
+
+        if interface:
+            gpus = gpus.filter(interface__in=interface)
+
+        if fans:
+            gpus = gpus.filter(fans__in=fans)
+
+    context = {
+        'form': form,
+        'gpus': gpus,
+    }
+    return render(request, 'gpu_list.html', context)
+
+Найти еще
+
+
+
+
+
+
+      <div class="col-md-3 mb-4">
+        <div class="bg-white p-4 rounded shadow-sm">
+          <h2 class="h5 mb-4">
+            <i class="fas fa-filter me-2 text-primary"></i>Фильтры
+          </h2>
+
+          <!-- Поиск -->
+          <div class="mb-4">
+            <label for="search" class="form-label">Поиск</label>
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                id="search"
+                placeholder="Название видеокарты..."
+              />
+              <button class="btn btn-outline-secondary" type="button">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Объем памяти -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Объём памяти</label>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value="8GB"
+                id="memory4"
+              />
+              <label class="form-check-label" for="memory4">8 ГБ</label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value="12GB"
+                id="memory6"
+              />
+              <label class="form-check-label" for="memory6">12 ГБ</label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value="16GB"
+                id="memory8"
+              />
+              <label class="form-check-label" for="memory8">16 ГБ</label>
+            </div>
+
+          </div>
+
+          <!-- Интерфейс -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Интерфейс</label>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value="PCIe 4.0"
+                id="interface3"
+              />
+              <label class="form-check-label" for="interface3">PCI-E 4.0</label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value="PCIe 5.0"
+                id="interface4"
+              />
+              <label class="form-check-label" for="interface4">PCI-E 5.0</label>
+            </div>
+          </div>
+
+          <!-- Количество вентиляторов -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Производитель чипа</label>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value="NVIDIA"
+                id="fans1"
+              />
+              <label class="form-check-label" for="fans1">NVIDIA</label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value="AMD"
+                id="fans2"
+              />
+              <label class="form-check-label" for="fans2">AMD</label>
+            </div>
+
+          </div>
+          <div class="mb-4">
+            <button class="btn btn-primary" type="button">Применить</button>
+        </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+<aside class="col-md-3 mb-4">
+    <form method="get" action="{% url 'case' %}" class="bg-white p-4 rounded shadow-sm filter-sidebar">
+        <h2 class="h5 mb-4">
+            <i class="fas fa-filter me-2 text-primary"></i>Фильтры
+        </h2>
+
+        <div class="mb-4">
+            <label class="form-label fw-semibold">Форм фактор</label>
+            {% for choice in form.form_factor %}
+                <div class="form-check">
+                    <label class="form-check-label">
+                        {{ choice.tag }}
+                        {{ choice.choice_label }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label fw-semibold">Тип корпуса</label>
+            {% for choice in form.type_size %}
+                <div class="form-check">
+                    <label class="form-check-label">
+                        {{ choice.tag }}
+                        {{ choice.choice_label }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Остальные фильтры -->
+
+        <button type="submit" class="btn btn-primary w-100">Применить фильтр</button>
+    </form>
+</aside>
+
+Найти еще
