@@ -40,99 +40,7 @@
     <div class="row">
       <!-- Фильтр -->
       <aside class="col-md-3 mb-4">
-        <form method="get" action="{% url 'memory' %}" class="bg-white p-4 rounded shadow-sm filter-sidebar">
-          <h2 class="h5 mb-4">
-              <i class="fas fa-filter me-2 text-primary"></i>Фильтры
-          </h2>
-
-          <div class="mb-4">
-              <label class="form-label fw-semibold">Количество памяти</label>
-              {% for choice in form.digital_storage %}
-                  <div class="form-check">
-                      <label class="form-check-label">
-                          {{ choice.tag }}
-                          {{ choice.choice_label }}
-                      </label>
-                  </div>
-              {% endfor %}
-          </div>
-
-          <div class="mb-4">
-              <label class="form-label fw-semibold">Интерфейс соединения</label>
-              {% for choice in form.interface_pci %}
-                  <div class="form-check">
-                      <label class="form-check-label">
-                          {{ choice.tag }}
-                          {{ choice.choice_label }}
-                      </label>
-                  </div>
-              {% endfor %}
-          </div>
-
-          <div class="mb-4">
-              <label class="form-label fw-semibold">Производитель</label>
-              {% for choice in form.fans %}
-                  <div class="form-check">
-                      <label class="form-check-label">
-                          {{ choice.tag }}
-                          {{ choice.choice_label }}
-                      </label>
-                  </div>
-              {% endfor %}
-          </div>
-
-            <!-- ... предыдущие фильтры ... -->
-
-<div class="mb-4">
-  <label class="form-label fw-semibold">Цена (₽)</label>
-  <div class="d-flex align-items-center gap-2">
-    <input
-      type="number"
-      class="form-control"
-      name="price_min"
-      placeholder="От"
-      min="0"
-      value="{{ form.price_min.value|default_if_none:'' }}"
-      style="max-width: 100px;"
-    />
-    <span>—</span>
-    <input
-      type="number"
-      class="form-control"
-      name="price_max"
-      placeholder="До"
-      min="0"
-      value="{{ form.price_max.value|default_if_none:'' }}"
-      style="max-width: 100px;"
-    />
-  </div>
-  <input
-    type="range"
-    class="form-range mt-3"
-    min="0"
-    max="15000"
-    step="100"
-    id="priceRange"
-    oninput="updatePriceMax(this.value)"
-    value="{{ form.price_max.value|default_if_none:'15000' }}"
-  />
-  <div class="d-flex justify-content-between small text-muted mt-1">
-    <span>0 ₽</span>
-    <span>15000 ₽</span>
-  </div>
-</div>
-
-<script>
-  function updatePriceMax(val) {
-    const maxInput = document.querySelector('input[name="price_max"]');
-    maxInput.value = val;
-  }
-</script>
-
-
-
-          <button type="submit" class="btn btn-primary w-100">Применить фильтр</button>
-        </form>
+        {% include 'store/include/memory_filter.html' %}
       </aside>
 
       <!-- Карточки товаров -->
@@ -160,39 +68,7 @@
 
           <!-- Добавьте дополнительные карточки аналогично... -->
 {% for i in memory %}
-  <div class="col-12 mb-4">
-  <div class="bg-white rounded shadow position-relative card-hover d-flex align-items-center p-4" style="min-height: 200px;">
-    <img
-      src="{% static i.image %}"
-
-      alt="Процессор"
-      class="img-fluid me-4"
-      style="width: 220px; height: auto; border-radius: 8px;"/>
-    <div class="flex-grow-1 d-flex flex-column justify-content-between h-100">
-      <div>
-        <h3 class="h5 mb-2">{{i.brand}} {{i.product_name}}</h3>
-        <p class="text-muted mb-3" style="max-width: 600px;">
-         {{i.digital_storage}} Гб, {{i.interface_pci}}
-        </p>
-
-      </div>
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="text-warning" style="font-size: 1.1rem;">
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star-half-alt"></i>
-          <span class="text-muted small ms-2">4.7</span>
-        </div>
-        <div class="price-tag fs-5 fw-bold">{{i.price}} ₽</div>
-        <button class="btn btn-primary btn-sm px-4">
-          <i class="fas fa-shopping-cart me-1"></i> Купить
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+ {% include 'store/cards/cpu_card.html' %}
 {% endfor %}
 
         </div>

@@ -18,7 +18,8 @@ urlpatterns = [
     path('case/', views.case, name='case'),
     path('motherboard/', views.motherboard, name='motherboard'),
     path('ram/', views.ram, name='ram'),
-    path('search/', views.search_products, name='search')
+    path('search/', views.search_products, name='search'),
+    path('azov/', views.azov, name='azov')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

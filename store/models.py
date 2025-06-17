@@ -1,6 +1,7 @@
 from django.db import models
 
 class GPU(models.Model):
+    category = models.CharField(max_length=20, null=True)
     product_name = models.CharField(max_length=100, unique=True)  # Идентификатор продукта
     vram = models.CharField(max_length=100)  # Объём видеопамяти в МБ
     brand = models.CharField(max_length=100)  # Бренд устройства
@@ -20,6 +21,7 @@ class GPU(models.Model):
         return f"{self.brand} {self.gpu_brand} - {self.product_name}"
 
 class cpu(models.Model):
+    category = models.CharField(max_length=20, null=True)
     product_name = models.CharField(max_length=100, unique=True)  # Название продукта
     brand = models.CharField(max_length=100)  # Бренд процессора
     product_line = models.CharField(max_length=100)  # Линейка продуктов
@@ -36,6 +38,7 @@ class cpu(models.Model):
 
 
 class Cooler(models.Model):
+    category = models.CharField(max_length=20, null=True)
     brand = models.CharField(max_length=100)  # Бренд
     product_name = models.CharField(max_length=100)
     cooler_type = models.CharField(max_length=100)  # Тип кулера
@@ -51,6 +54,7 @@ class Cooler(models.Model):
         return f"{self.brand} {self.cooler_type}"
 
 class Memory(models.Model):
+    category = models.CharField(max_length=20, null=True)
     brand = models.CharField(max_length=100)  # Бренд
     memory_type = models.CharField(max_length=100)
     product_name = models.CharField(max_length=100)  # Название продукта
@@ -65,6 +69,7 @@ class Memory(models.Model):
         return f"{self.brand} {self.product_name}"
 
 class Motherboard(models.Model):
+    category = models.CharField(max_length=20, null=True)
     brand = models.CharField(max_length=100)  # Бренд
     product_name = models.CharField(max_length=100)  # Название продукта
     socket = models.CharField(max_length=50)  # Тип сокета
@@ -78,6 +83,7 @@ class Motherboard(models.Model):
         return f"{self.brand} {self.product_name}"
 
 class PowerSupply(models.Model):
+    category = models.CharField(max_length=20, null=True)
     brand = models.CharField(max_length=100)  # Бренд
     product_name = models.CharField(max_length=100)  # Название продукта
     wattage = models.PositiveIntegerField()  # Мощность в ваттах
@@ -94,6 +100,7 @@ class PowerSupply(models.Model):
         return f"{self.brand} {self.product_name}"
 
 class Case(models.Model):
+    category = models.CharField(max_length=20, null=True)
     brand = models.CharField(max_length=100)  # Бренд
     product_name = models.CharField(max_length=100)  # Название продукта
     type_size = models.CharField(max_length=50)  # Размер корпуса
@@ -109,6 +116,7 @@ class Case(models.Model):
         return f"{self.brand} {self.product_name}"
 
 class RAM(models.Model):
+    category = models.CharField(max_length=20, null=True)
     brand = models.CharField(max_length=100)  # Бренд
     product_name = models.CharField(max_length=100)  # Название продукта
     form_factor = models.CharField(max_length=50)  # Форм-фактор

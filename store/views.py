@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import GPU, cpu, Cooler, Memory, PowerSupply, Case, Motherboard, RAM
 from django.http import HttpResponse, HttpResponseNotFound
-from .forms import GpuFilterForm, CpuFilterForm, CoolerFilterForm, PsuFilterForm, MotherboardFilterForm, MemoryFilterForm, CaseFilterForm, RamFilterForm
+from .forms import GpuFilterForm, CpuFilterForm, CoolerFilterForm, PsuFilterForm, MotherboardFilterForm, MemoryFilterForm, CaseFilterForm, RamFilterForm, SearchForm
 from django.template.loader import render_to_string
 from django.db.models import Q
 
@@ -178,7 +178,7 @@ def psu(request):
         price_max = form.cleaned_data.get('price_max')
         watt_min = form.cleaned_data.get('watt_min')
         watt_max = form.cleaned_data.get('watt_max')
-
+        watt = form.cleaned_data.get('watt')
         if sertificate:
             psu = psu.filter(certificate__in=sertificate)
 
@@ -191,11 +191,10 @@ def psu(request):
         if price_max is not None:
             psu = psu.filter(price__lte=price_max)
 
-        if watt_min is not None:
-            psu = psu.filter(watt__gte=watt_min)
+        if watt is not None:
+            psu = psu.filter(watt__gte=watt)
 
-        if watt_max is not None:
-            psu = psu.filter(watt__lte=watt_max)
+
     context = {
         'form': form,
         'psu': psu,
@@ -301,57 +300,274 @@ def ram(request):
     return render(request, 'store/ram.html', context)
 
 
+
+def detect_category(query):
+    query_lower = query.lower()
+
+
+    if any(kw in query_lower for kw in ['i3', 'i5', 'i7', 'i9', 'ryzen', 'intel', '12400', '9800x3d', '13100']):
+        return 'cpu'
+
+
+    elif any(kw in query_lower for kw in ['rtx', 'gtx', 'rx', 'geforce', 'radeon', '5060','4069','7700','4070']):
+        return 'GPU'
+
+
+    elif any(kw in query_lower for kw in ['motherboard', 'mobo', 'b550', 'z490', 'a520']):
+        return 'Motherboard'
+
+    elif any(kw in query_lower for kw in ['корпус', 'h510', 'ck560', 'inwin', 'define']):
+        return 'case'
+
+    elif any(kw in query_lower for kw in ['оперативная память', 'ram', 'g skill', 'viper', 'fury']):
+        return 'ram'
+
+    elif any(kw in query_lower for kw in ['бп', 'straight power', 'supernova', 'focus', 'rm750', 'блок питания', 650, '750', 850]):
+        return 'psu'
+
+    elif any(kw in query_lower for kw in ['ssd', 'ссд', 'adata', 'samsung', 'a2000']):
+        return 'memory'
+
+    elif any(kw in query_lower for kw in ['frozn', 'hyper', 'nh', 'dark', 'water']):
+        return 'cooler'
+    else:
+        return None
+
+
 def search_products(request):
-
     query = request.GET.get('search', '').strip()
-    print(f"Search query: '{query}'")
+    cat = None
     results = []
-    CPU = cpu.objects.all()
+    filter_form = None
 
-    if query:
-        # Ищем во всех категориях товаров
-        cpus = cpu.objects.filter(
-            Q(product_name__icontains=query) |
-            Q(brand__icontains=query)
+    # Инициализация всех queryset
+    gpus = GPU.objects.filter(
+        Q(product_name__icontains=query) |
+        Q(brand__icontains=query)
+    )
+    cpus = cpu.objects.filter(
+        Q(product_name__icontains=query) |
+        Q(brand__icontains=query)
+    )
+    motherboards = Motherboard.objects.filter(
+        Q(product_name__icontains=query) |
+        Q(brand__icontains=query) |
+        Q(socket__icontains=query)
+    )
+    rams = RAM.objects.filter(
+        Q(product_name__icontains=query) |
+        Q(brand__icontains=query)
+    )
+    psus = PowerSupply.objects.filter(
+        Q(product_name__icontains=query) |
+        Q(brand__icontains=query)
+    )
+    cases = Case.objects.filter(
+        Q(product_name__icontains=query) |
+        Q(brand__icontains=query)
+    )
+    memorys = Memory.objects.filter(
+        Q(product_name__icontains=query) |
+        Q(brand__icontains=query)
+    )
+    coolers = Cooler.objects.filter(
+        Q(product_name__icontains=query) |
+        Q(brand__icontains=query)
+    )
 
-        )
+    # Определяем категорию и применяем фильтры
+    if gpus.exists():
+        cat = 'gpu'
+        filter_form = GpuFilterForm(request.GET or None)
+        results = gpus
 
-        gpus = GPU.objects.filter(
-            Q(product_name__icontains=query) |
-            Q(brand__icontains=query)
+        if filter_form.is_valid():
+            data = filter_form.cleaned_data
 
-        )
+            # Фильтрация по памяти (если поле раскомментировано)
+            if 'memory' in filter_form.fields and data.get('memory'):
+                results = results.filter(vram__in=data['memory'])
 
-        motherboards = Motherboard.objects.filter(
-            Q(product_name__icontains=query) |
-            Q(brand__icontains=query) |
-            Q(socket__icontains=query)
-        )
-        Coolers = Cooler.objects.filter(
-            Q(product_name__icontains=query) |
-            Q(brand__icontains=query)
-            )
+            # Фильтрация по интерфейсу (если поле раскомментировано)
+            if 'interface' in filter_form.fields and data.get('interface'):
+                results = results.filter(pci__in=data['interface'])
 
-        Memorys = Memory.objects.filter(
-            Q(product_name__icontains=query) |
-            Q(brand__icontains=query)
-            )
+            # Фильтрация по бренду (fans)
+            if data.get('fans'):
+                results = results.filter(brand__in=data['fans'])
 
-        PowerSupplyS = PowerSupply.objects.filter(
-            Q(product_name__icontains=query) |
-            Q(brand__icontains=query)
-            )
+            # Фильтрация по цене
+            if data.get('price_min'):
+                results = results.filter(price__gte=data['price_min'])
+            if data.get('price_max'):
+                results = results.filter(price__lte=data['price_max'])
 
-        Cases = Case.objects.filter(
-            Q(product_name__icontains=query) |
-            Q(brand__icontains=query)
-            )
+    elif cpus.exists():
+        cat = 'cpu'
+        filter_form = CpuFilterForm(request.GET or None)
+        results = cpus
 
-        RAMS = RAM.objects.filter(
-            Q(product_name__icontains=query) |
-            Q(brand__icontains=query)
-            )
-        # Объединяем результаты
-        results = list(cpus) + list(gpus) + list(motherboards)+ list(RAMS) + list(Cases) + list(PowerSupplyS) + list(Memorys) + list(Coolers)
-        print(f"Total results: {len(results)}")
-    return render(request, 'store/search_results.html', {'results': results, 'query': query, 'cpu': CPU})
+        if filter_form.is_valid():
+            data = filter_form.cleaned_data
+
+            if 'socket' in filter_form.fields and data.get('socket'):
+                results = results.filter(socket__in=data['socket'])
+
+            if 'cores' in filter_form.fields and data.get('cores'):
+                results = results.filter(cores__in=data['cores'])
+
+            if data.get('fans'):
+                results = results.filter(brand__in=data['fans'])
+
+            if data.get('price_min'):
+                results = results.filter(price__gte=data['price_min'])
+            if data.get('price_max'):
+                results = results.filter(price__lte=data['price_max'])
+
+    # Аналогичные блоки для остальных категорий (motherboard, ram, psu, case, memory, cooler)
+    # Шаблон такой же, меняются только названия полей
+
+    elif motherboards.exists():
+        cat = 'motherboard'
+        filter_form = MotherboardFilterForm(request.GET or None)
+        results = motherboards
+
+        if filter_form.is_valid():
+            data = filter_form.cleaned_data
+
+            if data.get('socket'):
+                results = results.filter(socket__in=data['socket'])
+
+            if data.get('form_factor'):
+                results = results.filter(form_factor__in=data['form_factor'])
+
+            if data.get('fans'):
+                results = results.filter(brand__in=data['fans'])
+
+            if data.get('price_min'):
+                results = results.filter(price__gte=data['price_min'])
+            if data.get('price_max'):
+                results = results.filter(price__lte=data['price_max'])
+
+    elif rams.exists():
+        cat = 'ram'
+        filter_form = RamFilterForm(request.GET or None)
+        results = rams
+
+        if filter_form.is_valid():
+            data = filter_form.cleaned_data
+
+            if data.get('memory_type'):
+                results = results.filter(memory_type__in=data['memory_type'])
+
+            if data.get('memory'):
+                results = results.filter(one_module_memory__in=data['memory'])
+
+            if data.get('fans'):
+                results = results.filter(brand__in=data['fans'])
+
+            if data.get('price_min'):
+                results = results.filter(price__gte=data['price_min'])
+            if data.get('price_max'):
+                results = results.filter(price__lte=data['price_max'])
+
+    elif psus.exists():
+        cat = 'psu'
+        filter_form = PsuFilterForm(request.GET or None)
+        results = psus
+
+        if filter_form.is_valid():
+            data = filter_form.cleaned_data
+
+            if data.get('sertificate'):
+                results = results.filter(certificate__in=data['sertificate'])
+
+            if data.get('fans'):
+                results = results.filter(brand__in=data['fans'])
+
+            if data.get('watt'):
+                results = results.filter(wattage__gte=data['watt'])
+
+            if data.get('price_min'):
+                results = results.filter(price__gte=data['price_min'])
+            if data.get('price_max'):
+                results = results.filter(price__lte=data['price_max'])
+
+
+
+
+    elif cases.exists():
+        cat = 'case'
+        filter_form = CaseFilterForm(request.GET or None)
+        results = cases
+
+        if filter_form.is_valid():
+            data = filter_form.cleaned_data
+
+            if data.get('type_size'):
+                results = results.filter(type_size__in=data['type_size'])
+
+            if data.get('form_factor'):
+                results = results.filter(form_factor__in=data['form_factor'])
+
+            if data.get('fans'):
+                results = results.filter(brand__in=data['fans'])
+
+            if data.get('price_min'):
+                results = results.filter(price__gte=data['price_min'])
+            if data.get('price_max'):
+                results = results.filter(price__lte=data['price_max'])
+
+    elif memorys.exists():
+        cat = 'memory'
+        filter_form = MemoryFilterForm(request.GET or None)
+        results = memorys
+
+        if filter_form.is_valid():
+            data = filter_form.cleaned_data
+
+            if data.get('digital_storage'):
+                results = results.filter(digital_storage__in=data['digital_storage'])
+
+            if data.get('interface_pci'):
+                results = results.filter(interface_pci__in=data['interface_pci'])
+
+            if data.get('fans'):
+                results = results.filter(brand__in=data['fans'])
+
+            if data.get('price_min'):
+                results = results.filter(price__gte=data['price_min'])
+            if data.get('price_max'):
+                results = results.filter(price__lte=data['price_max'])
+
+    elif coolers.exists():
+        cat = 'cooler'
+        filter_form = CoolerFilterForm(request.GET or None)
+        results = coolers
+
+        if filter_form.is_valid():
+            data = filter_form.cleaned_data
+
+            if data.get('socket'):
+                results = results.filter(socket__in=data['socket'])
+
+            if data.get('cooler_type'):
+                results = results.filter(cooler_type__in=data['cooler_type'])
+
+            if data.get('fans'):
+                results = results.filter(brand__in=data['fans'])
+
+            if data.get('price_min'):
+                results = results.filter(price__gte=data['price_min'])
+            if data.get('price_max'):
+                results = results.filter(price__lte=data['price_max'])
+
+    return render(request, 'store/search_results.html', {
+        'query': query,
+        'category': cat,
+        'results': results,
+        'form': filter_form,
+    })
+
+def azov(request):
+    return render(request, 'store/product.html')

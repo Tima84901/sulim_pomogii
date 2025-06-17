@@ -2,7 +2,7 @@
 from django import forms
 
 class GpuFilterForm(forms.Form):
-    search = forms.CharField(required=False, label='Поиск')
+
     memory = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
@@ -144,6 +144,16 @@ class PsuFilterForm(forms.Form):
             ('be quiet!', 'be quiet!'),
         ]
     )
+    watt = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=[
+            (650, '650'),
+            (750, '750'),
+            (850, '850'),
+
+        ]
+    )
     price_min = forms.FloatField(
         required=False,
         widget=forms.NumberInput(attrs={'placeholder': 'Минимальная цена'}),
@@ -153,14 +163,7 @@ class PsuFilterForm(forms.Form):
         widget=forms.NumberInput(attrs={'placeholder': 'Максимальная цена'}),
     )
 
-    watt_min = forms.FloatField(
-        required=False,
-        widget=forms.NumberInput(attrs={'placeholder': 'Минимальный вольтаж'}),
-    )
-    watt_max = forms.FloatField(
-        required=False,
-        widget=forms.NumberInput(attrs={'placeholder': 'Максимальный вольтаж'}),
-    )
+
 
 
 

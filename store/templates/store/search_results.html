@@ -3,106 +3,311 @@
 {% load static %}
 {% block content %}
 
-{% for product in results %}
-<style>
-    .card-hover:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    }
-    .price-tag {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: rgba(255, 255, 255, 0.9);
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-weight: bold;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-  </style>
-    <div class="product">
+<div class="product">
+  <div class="container mt-4">
+  <h1 class="text-center mb-4">Результаты поиска</h1>
 
-        {% if product|model_type == 'cpu' %}
-             <div class="col-md-9">
-        <!-- Сортировка -->
-        <div
-          class="bg-white p-3 rounded shadow-sm mb-4 d-flex justify-content-between align-items-center flex-wrap"
-        >
-          <div class="text-muted mb-2 mb-md-0">
-            Найдено <strong>12</strong> товаров
-          </div>
-          <div class="d-flex align-items-center">
-            <label for="sort" class="me-2 mb-0">Сортировка:</label>
-            <select class="form-select form-select-sm" id="sort" style="min-width: 180px;">
-              <option>По популярности</option>
-              <option>По возрастанию цены</option>
-              <option>По убыванию цены</option>
-              <option>По новизне</option>
-            </select>
-          </div>
-        </div>
+  <div class="row">
+    <!-- Фильтры (слева) -->
+    <aside class="col-md-3 mb-4">
+  {% if category == 'cpu' %}
+    {% include 'store/search_filters/cpu_search_filter.html' %}
+  {% elif category == 'gpu' %}
+    {% include 'store/search_filters/gpu_search_filter.html' %}
+  {% elif category == 'motherboard' %}
+    {% include 'store/search_filters/motherboard_search_filter.html' %}
+  {% elif category == 'ram' %}
+    {% include 'store/search_filters/ram_search_filter.html' %}
+  {% elif category == 'case' %}
+    {% include 'store/search_filters/case_search_filter.html' %}
+  {% elif category == 'psu' %}
+    {% include 'store/search_filters/psu_search_filter.html' %}
+  {% elif category == 'cooler' %}
+    {% include 'store/search_filters/memory_search_filter.html' %}
+  {% elif category == 'memory' %}
+    {% include 'store/memory_filters/cooler_search_filter.html' %}
+      {% elif query %}
+    <p>Категория не определена. Уточните запрос.</p>
+  {% endif %}
+    </aside>
 
-        <!-- Список карточек -->
+    <!-- Карточки товаров -->
+    <div class="col-md-9">
+      <div class="row g-3">
+        {% for product in results %}
+          {% if category == 'cpu' %}
+            <!-- CPU карточка -->
+            <div class="col-12 mb-4">
+              <div class="bg-white rounded shadow position-relative card-hover d-flex align-items-center p-4" style="min-height: 200px;">
+                <img src="{% static product.image %}" alt="{{ product.name }}" class="img-fluid me-4" style="width: 220px; height: auto; border-radius: 8px;"/>
+                <div class="flex-grow-1 d-flex flex-column justify-content-between h-100">
+                  <div>
+                    <h3 class="h5 mb-2">{{ product.brand }} {{ product.product_name }}</h3>
+                    <p class="text-muted mb-3" style="max-width: 600px;">
+                      {{ product.socket }}, {{ product.cpu_clock }} МГц, {{ product.cores }} ядер, {{ product.potok }} потоков, TDP {{ product.tdp }} Вт
+                    </p>
+                    <div class="mb-3">
+                      <span class="badge bg-primary me-2">Turbo Boost</span>
+                      <span class="badge bg-success me-2">Hyper-Threading</span>
+                      <span class="badge bg-secondary me-2">Unlocked</span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-warning" style="font-size: 1.1rem;">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star-half-alt"></i>
+                      <span class="text-muted small ms-2">4.7</span>
+                    </div>
+                    <div class="price-tag fs-5 fw-bold">{{ product.price }} ₽</div>
+                    <button class="btn btn-primary btn-sm px-4">
+                      <i class="fas fa-shopping-cart me-1"></i> Купить
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
 
-          <!-- Добавьте дополнительные карточки аналогично... -->
-{% for i in cpu %}
-  <div class="col-12 mb-4">
-  <div class="bg-white rounded shadow position-relative card-hover d-flex align-items-center p-4" style="min-height: 200px;">
-    <img
-      src="{% static i.image %}"
+          {% elif category == 'gpu' %}
+            <!-- GPU карточка -->
+            <div class="col-12 mb-4">
+              <div class="bg-white rounded shadow position-relative card-hover d-flex align-items-center p-4" style="min-height: 200px;">
+                <img src="{% static product.image %}" alt="{{ product.name }}" class="img-fluid me-4" style="width: 220px; height: auto; border-radius: 8px;"/>
+                <div class="flex-grow-1 d-flex flex-column justify-content-between h-100">
+                  <div>
+                    <h3 class="h5 mb-2">{{ product.brand }} {{ product.product_name }}</h3>
+                    <p class="text-muted mb-3" style="max-width: 600px;">
+                      {{ product.pci }}, {{ product.vram_type }}, {{ product.vram }}, {{ product.memory_interface }}, {{ product.output_type }}, {{ product.gpu_clock }} МГц
+                    </p>
+                    <div class="mb-3">
+                      <span class="badge bg-info me-2">PCIe 4.0</span>
+                      <span class="badge bg-danger me-2">DLSS</span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-warning" style="font-size: 1.1rem;">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star-half-alt"></i>
+                      <span class="text-muted small ms-2">4.6</span>
+                    </div>
+                    <div class="price-tag fs-5 fw-bold">{{ product.price }} ₽</div>
+                    <button class="btn btn-primary btn-sm px-4">
+                      <i class="fas fa-shopping-cart me-1"></i> Купить
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% elif category == 'Motherboard' %}
+            <!-- Материнская плата -->
+            <div class="col-12 mb-4">
+              <div class="bg-white rounded shadow position-relative card-hover d-flex align-items-center p-4" style="min-height: 200px;">
+                <img src="{% static product.image %}" alt="{{ product.name }}" class="img-fluid me-4" style="width: 220px; height: auto; border-radius: 8px;"/>
+                <div class="flex-grow-1 d-flex flex-column justify-content-between h-100">
+                  <div>
+                    <h3 class="h5 mb-2">{{ product.brand }} {{ product.product_name }}</h3>
+                    <p class="text-muted mb-3" style="max-width: 600px;">
+                      {{ product.socket }}, {{ product.chipset }}, {{ product.ram_slots }} слотов, {{ product.form_factor }}
+                    </p>
+                    <div class="mb-3">
+                      <span class="badge bg-dark me-2">M.2</span>
+                      <span class="badge bg-secondary me-2">RGB</span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-warning" style="font-size: 1.1rem;">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star-half-alt"></i>
+                      <span class="text-muted small ms-2">4.5</span>
+                    </div>
+                    <div class="price-tag fs-5 fw-bold">{{ product.price }} ₽</div>
+                    <button class="btn btn-primary btn-sm px-4">
+                      <i class="fas fa-shopping-cart me-1"></i> Купить
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% elif category == 'ram' %}
+                    <div class="col-12 mb-4">
+              <div class="bg-white rounded shadow position-relative card-hover d-flex align-items-center p-4" style="min-height: 200px;">
+                <img src="{% static product.image %}" alt="{{ product.name }}" class="img-fluid me-4" style="width: 220px; height: auto; border-radius: 8px;"/>
+                <div class="flex-grow-1 d-flex flex-column justify-content-between h-100">
+                  <div>
+                    <h3 class="h5 mb-2">{{ product.brand }} {{ product.product_name }}</h3>
+                    <p class="text-muted mb-3" style="max-width: 600px;">
+                      {{product.memory_type}}, {{product.one_module_memory}} Гбx{{product.moduls_in}} шт, {{product.hertz}} МГц, {{product.timings}}
+                    </p>
+                    <div class="mb-3">
+                      <span class="badge bg-dark me-2">M.2</span>
+                      <span class="badge bg-secondary me-2">RGB</span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-warning" style="font-size: 1.1rem;">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star-half-alt"></i>
+                      <span class="text-muted small ms-2">4.5</span>
+                    </div>
+                    <div class="price-tag fs-5 fw-bold">{{ product.price }} ₽</div>
+                    <button class="btn btn-primary btn-sm px-4">
+                      <i class="fas fa-shopping-cart me-1"></i> Купить
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      alt="Процессор"
-      class="img-fluid me-4"
-      style="width: 220px; height: auto; border-radius: 8px;"/>
-    <div class="flex-grow-1 d-flex flex-column justify-content-between h-100">
-      <div>
-        <h3 class="h5 mb-2">{{i.brand}} {{i.product_name}}</h3>
-        <p class="text-muted mb-3" style="max-width: 600px;">
-         {{i.socket}}, {{i.cpu_clock}} МГц, {{i.cores}} ядер, {{i.potok}} потоков, TDP {{i.tdp}} Вт
-        </p>
-        <div class="mb-3">
-          <span class="badge bg-primary me-2">Turbo Boost</span>
-          <span class="badge bg-success me-2">Hyper-Threading</span>
-          <span class="badge bg-secondary me-2">Unlocked</span>
+        {% elif category == 'case' %}
+                    <div class="col-12 mb-4">
+              <div class="bg-white rounded shadow position-relative card-hover d-flex align-items-center p-4" style="min-height: 200px;">
+                <img src="{% static product.image %}" alt="{{ product.name }}" class="img-fluid me-4" style="width: 220px; height: auto; border-radius: 8px;"/>
+                <div class="flex-grow-1 d-flex flex-column justify-content-between h-100">
+                  <div>
+                    <h3 class="h5 mb-2">{{ product.brand }} {{ product.product_name }}</h3>
+                    <p class="text-muted mb-3" style="max-width: 600px;">
+                      {{product.type_size}}, {{product.form_factor}} , {{product.body_material}}, {{product.size}}
+                    </p>
+                    <div class="mb-3">
+                      <span class="badge bg-dark me-2">M.2</span>
+                      <span class="badge bg-secondary me-2">RGB</span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-warning" style="font-size: 1.1rem;">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star-half-alt"></i>
+                      <span class="text-muted small ms-2">4.5</span>
+                    </div>
+                    <div class="price-tag fs-5 fw-bold">{{ product.price }} ₽</div>
+                    <button class="btn btn-primary btn-sm px-4">
+                      <i class="fas fa-shopping-cart me-1"></i> Купить
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-        </div>
-      </div>
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="text-warning" style="font-size: 1.1rem;">
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star-half-alt"></i>
-          <span class="text-muted small ms-2">4.7</span>
-        </div>
-        <div class="price-tag fs-5 fw-bold">{{i.price}} ₽</div>
-        <button class="btn btn-primary btn-sm px-4">
-          <i class="fas fa-shopping-cart me-1"></i> Купить
-        </button>
+        {% elif category == 'psu' %}
+                    <div class="col-12 mb-4">
+              <div class="bg-white rounded shadow position-relative card-hover d-flex align-items-center p-4" style="min-height: 200px;">
+                <img src="{% static product.image %}" alt="{{ product.name }}" class="img-fluid me-4" style="width: 220px; height: auto; border-radius: 8px;"/>
+                <div class="flex-grow-1 d-flex flex-column justify-content-between h-100">
+                  <div>
+                    <h3 class="h5 mb-2">{{ product.brand }} {{ product.product_name }}</h3>
+                    <p class="text-muted mb-3" style="max-width: 600px;">
+                     {{product.wattage}} Вт, {{product.formfactor}}, {{product.certificate}}, {{product.pins}}
+                    </p>
+                    <div class="mb-3">
+                      <span class="badge bg-dark me-2">M.2</span>
+                      <span class="badge bg-secondary me-2">RGB</span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-warning" style="font-size: 1.1rem;">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star-half-alt"></i>
+                      <span class="text-muted small ms-2">4.5</span>
+                    </div>
+                    <div class="price-tag fs-5 fw-bold">{{ product.price }} ₽</div>
+                    <button class="btn btn-primary btn-sm px-4">
+                      <i class="fas fa-shopping-cart me-1"></i> Купить
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        {% elif category == 'cooler' %}
+                    <div class="col-12 mb-4">
+              <div class="bg-white rounded shadow position-relative card-hover d-flex align-items-center p-4" style="min-height: 200px;">
+                <img src="{% static product.image %}" alt="{{ product.name }}" class="img-fluid me-4" style="width: 220px; height: auto; border-radius: 8px;"/>
+                <div class="flex-grow-1 d-flex flex-column justify-content-between h-100">
+                  <div>
+                    <h3 class="h5 mb-2">{{ product.brand }} {{ product.product_name }}</h3>
+                    <p class="text-muted mb-3" style="max-width: 600px;">
+                      {{product.socket}}, {{product.tdp}} Вт, {{product.connector_type}} коннектор, {{product.cooler_size}}
+                    </p>
+                    <div class="mb-3">
+                      <span class="badge bg-dark me-2">M.2</span>
+                      <span class="badge bg-secondary me-2">RGB</span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-warning" style="font-size: 1.1rem;">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star-half-alt"></i>
+                      <span class="text-muted small ms-2">4.5</span>
+                    </div>
+                    <div class="price-tag fs-5 fw-bold">{{ product.price }} ₽</div>
+                    <button class="btn btn-primary btn-sm px-4">
+                      <i class="fas fa-shopping-cart me-1"></i> Купить
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        {% elif category == 'memory' %}
+                    <div class="col-12 mb-4">
+              <div class="bg-white rounded shadow position-relative card-hover d-flex align-items-center p-4" style="min-height: 200px;">
+                <img src="{% static product.image %}" alt="{{ product.name }}" class="img-fluid me-4" style="width: 220px; height: auto; border-radius: 8px;"/>
+                <div class="flex-grow-1 d-flex flex-column justify-content-between h-100">
+                  <div>
+                    <h3 class="h5 mb-2">{{ product.brand }} {{ product.product_name }}</h3>
+                    <p class="text-muted mb-3" style="max-width: 600px;">
+                      {{product.digital_storage}} Гб, {{product.interface_pci}}
+                    </p>
+                    <div class="mb-3">
+                      <span class="badge bg-dark me-2">M.2</span>
+                      <span class="badge bg-secondary me-2">RGB</span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-warning" style="font-size: 1.1rem;">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star-half-alt"></i>
+                      <span class="text-muted small ms-2">4.5</span>
+                    </div>
+                    <div class="price-tag fs-5 fw-bold">{{ product.price }} ₽</div>
+                    <button class="btn btn-primary btn-sm px-4">
+                      <i class="fas fa-shopping-cart me-1"></i> Купить
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
       </div>
     </div>
   </div>
 </div>
-{% endfor %}
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-        {% elif product|model_type == 'GPU' %}
-            <p>Тип: Видеокарта</p>
-
-
-        {% elif product|model_type == 'Motherboard' %}
-            <p>Тип: Материнская плата</p>
-
-        {% endif %}
-    </div>
-{% endfor %}
-
+</div>
 {% endblock %}
+
+
