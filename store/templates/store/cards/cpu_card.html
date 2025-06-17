@@ -1,0 +1,56 @@
+{% load static %}
+  <style>
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    .price-tag {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+  <div class="col-12 mb-4">
+  <div class="bg-white rounded shadow position-relative card-hover d-flex align-items-center p-4" style="min-height: 200px;">
+    <img
+      src="{% static i.image %}"
+
+      alt="Процессор"
+      class="img-fluid me-4"
+      style="width: 220px; height: auto; border-radius: 8px;"/>
+    <div class="flex-grow-1 d-flex flex-column justify-content-between h-100">
+      <div>
+        <h3 class="h5 mb-2">{{i.brand}} {{i.product_name}}</h3>
+        <p class="text-muted mb-3" style="max-width: 600px;">
+         {{i.socket}}, {{i.cpu_clock}} МГц, {{i.cores}} ядер, {{i.potok}} потоков, TDP {{i.tdp}} Вт
+        </p>
+        <div class="mb-3">
+          <span class="badge bg-primary me-2">Turbo Boost</span>
+          <span class="badge bg-success me-2">Hyper-Threading</span>
+          <span class="badge bg-secondary me-2">Unlocked</span>
+
+        </div>
+      </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="text-warning" style="font-size: 1.1rem;">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+          <span class="text-muted small ms-2">4.7</span>
+        </div>
+        <div class="price-tag fs-5 fw-bold">{{i.price}} ₽</div>
+        <button class="btn btn-primary btn-sm px-4">
+          <i class="fas fa-shopping-cart me-1"></i> Купить
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

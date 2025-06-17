@@ -1,0 +1,32 @@
+<form method="get" class="filter-form">
+    <input type="hidden" name="search" value="{{ query }}">
+
+    <div class="filter-section">
+        <h5>Объем памяти</h5>
+        {{ form.memory }}
+    </div>
+
+    <div class="filter-section">
+        <h5>Интерфейс</h5>
+        {{ form.interface }}
+    </div>
+
+    <div class="filter-section">
+        <h5>Производитель</h5>
+        {{ form.fans }}
+    </div>
+
+    <div class="filter-section">
+        <h5>Цена</h5>
+        <div class="row">
+            <div class="col">
+                {{ form.price_min }}
+            </div>
+            <div class="col">
+                {{ form.price_max }}
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-sm mt-3">Применить фильтры</button>
+</form>

@@ -1,0 +1,93 @@
+ <form method="get" action="{% url 'motherboard' %}" class="bg-white p-4 rounded shadow-sm filter-sidebar">
+          <h2 class="h5 mb-4">
+              <i class="fas fa-filter me-2 text-primary"></i>Фильтры
+          </h2>
+
+          <div class="mb-4">
+              <label class="form-label fw-semibold">Сокет</label>
+              {% for choice in form.socket %}
+                  <div class="form-check">
+                      <label class="form-check-label">
+                          {{ choice.tag }}
+                          {{ choice.choice_label }}
+                      </label>
+                  </div>
+              {% endfor %}
+          </div>
+
+          <div class="mb-4">
+              <label class="form-label fw-semibold">Форм фактор</label>
+              {% for choice in form.form_factor %}
+                  <div class="form-check">
+                      <label class="form-check-label">
+                          {{ choice.tag }}
+                          {{ choice.choice_label }}
+                      </label>
+                  </div>
+              {% endfor %}
+          </div>
+
+          <div class="mb-4">
+              <label class="form-label fw-semibold">Производитель</label>
+              {% for choice in form.fans %}
+                  <div class="form-check">
+                      <label class="form-check-label">
+                          {{ choice.tag }}
+                          {{ choice.choice_label }}
+                      </label>
+                  </div>
+              {% endfor %}
+          </div>
+
+            <!-- ... предыдущие фильтры ... -->
+
+<div class="mb-4">
+  <label class="form-label fw-semibold">Цена (₽)</label>
+  <div class="d-flex align-items-center gap-2">
+    <input
+      type="number"
+      class="form-control"
+      name="price_min"
+      placeholder="От"
+      min="0"
+      value="{{ form.price_min.value|default_if_none:'' }}"
+      style="max-width: 100px;"
+    />
+    <span>—</span>
+    <input
+      type="number"
+      class="form-control"
+      name="price_max"
+      placeholder="До"
+      min="0"
+      value="{{ form.price_max.value|default_if_none:'' }}"
+      style="max-width: 100px;"
+    />
+  </div>
+  <input
+    type="range"
+    class="form-range mt-3"
+    min="0"
+    max="50000"
+    step="100"
+    id="priceRange"
+    oninput="updatePriceMax(this.value)"
+    value="{{ form.price_max.value|default_if_none:'10000' }}"
+  />
+  <div class="d-flex justify-content-between small text-muted mt-1">
+    <span>0 ₽</span>
+    <span>50000 ₽</span>
+  </div>
+</div>
+
+<script>
+  function updatePriceMax(val) {
+    const maxInput = document.querySelector('input[name="price_max"]');
+    maxInput.value = val;
+  }
+</script>
+
+
+
+          <button type="submit" class="btn btn-primary w-100">Применить фильтр</button>
+        </form>
