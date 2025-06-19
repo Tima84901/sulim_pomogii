@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import GPU, cpu, Cooler, Memory, PowerSupply, Case, Motherboard, RAM
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, Http404
 from .forms import GpuFilterForm, CpuFilterForm, CoolerFilterForm, PsuFilterForm, MotherboardFilterForm, MemoryFilterForm, CaseFilterForm, RamFilterForm, SearchForm
-from django.template.loader import render_to_string
+from django.template.loader import render_to_string, select_template
 from django.db.models import Q
-
+import logging
 # Create your views here.
 def index(request):
     data = {'title': 'Главная страница'}
@@ -29,545 +29,375 @@ def contacts(request):   ### раздел "О сайте"
     return render(request, 'store/contacts.html')
 
 def gpu(request):
-    gpu = GPU.objects.all()
-
+    qs = GPU.objects.all()
     form = GpuFilterForm(request.GET or None)
 
-
     if form.is_valid():
-        search = form.cleaned_data.get('search')
-        memory = form.cleaned_data.get('memory')
-        interface = form.cleaned_data.get('interface')
-        fans = form.cleaned_data.get('fans')
-        price_min = form.cleaned_data.get('price_min')
-        price_max = form.cleaned_data.get('price_max')
+        data = form.cleaned_data
+        if data['search']:    qs = qs.filter(product_name__icontains=data['search'])
+        if data['memory']:    qs = qs.filter(vram__in=data['memory'])
+        if data['interface']: qs = qs.filter(pci__in=data['interface'])
+        if data['fans']:      qs = qs.filter(brand__in=data['fans'])
+        if data['price_min']: qs = qs.filter(price__gte=data['price_min'])
+        if data['price_max']: qs = qs.filter(price__lte=data['price_max'])
 
-        if search:
-            gpu = gpu.filter(name__icontains=search)
-
-        if memory:
-            gpu = gpu.filter(vram__in=memory)
-
-        if interface:
-            gpu = gpu.filter(pci__in=interface)
-
-        if fans:
-            gpu = gpu.filter(brand__in=fans)
-
-        if price_min is not None:
-            gpu = gpu.filter(price__gte=price_min)
-
-        if price_max is not None:
-            gpu = gpu.filter(price__lte=price_max)
-    context = {
-        'form': form,
-        'gpu': gpu,
-    }
-    return render(request, 'store/gpu.html', context)
+    return render(request, 'store/gpu.html',
+                  {'form': form, 'products': qs})
 
 
 
 def cpus(request):
-    CPU = cpu.objects.all()
+    # CPU = cpu.objects.all()
+    # form = CpuFilterForm(request.GET or None)
+    # if form.is_valid():
+    #     socket = form.cleaned_data.get('socket')
+    #     cores = form.cleaned_data.get('cores')
+    #     fans = form.cleaned_data.get('fans')
+    #     price_min = form.cleaned_data.get('price_min')
+    #     price_max = form.cleaned_data.get('price_max')
+    #
+    #     if socket:
+    #         CPU = CPU.filter(socket__in=socket)
+    #
+    #     if cores:
+    #         CPU = CPU.filter(cores__in=cores)
+    #
+    #     if fans:
+    #         CPU = CPU.filter(brand__in=fans)
+    #
+    #     if price_min is not None:
+    #         CPU = CPU.filter(price__gte=price_min)
+    #
+    #     if price_max is not None:
+    #         CPU = CPU.filter(price__lte=price_max)
+    #
+    # context = {
+    #     'form': form,
+    #     'cpu': CPU,
+    #     'component': 'cpu',
+    #
+    # }
+    # return render(request, 'store/cpu.html', context)
+    qs = cpu.objects.all()
     form = CpuFilterForm(request.GET or None)
 
     if form.is_valid():
-        socket = form.cleaned_data.get('socket')
-        cores = form.cleaned_data.get('cores')
-        fans = form.cleaned_data.get('fans')
-        price_min = form.cleaned_data.get('price_min')
-        price_max = form.cleaned_data.get('price_max')
+        data = form.cleaned_data
+        if data['socket']:     qs = qs.filter(socket__in=data['socket'])
+        if data['cores']:      qs = qs.filter(cores__in=data['cores'])
+        if data['fans']:       qs = qs.filter(brand__in=data['fans'])
+        if data['price_min']:  qs = qs.filter(price__gte=data['price_min'])
+        if data['price_max']:  qs = qs.filter(price__lte=data['price_max'])
 
-        if socket:
-            CPU = CPU.filter(socket__in=socket)
-
-        if cores:
-            CPU = CPU.filter(cores__in=cores)
-
-        if fans:
-            CPU = CPU.filter(brand__in=fans)
-
-        if price_min is not None:
-            CPU = CPU.filter(price__gte=price_min)
-
-        if price_max is not None:
-            CPU = CPU.filter(price__lte=price_max)
-
-    context = {
-        'form': form,
-        'cpu': CPU,
-    }
-    return render(request, 'store/cpu.html', context)
+    return render(request, 'store/cpu.html',
+                  {'form': form, 'products': qs})
 
 def cooler(request):
-    cooler = Cooler.objects.all()
+    qs = Cooler.objects.all()
     form = CoolerFilterForm(request.GET or None)
+
     if form.is_valid():
-        socket = form.cleaned_data.get('socket')
-        cooler_type = form.cleaned_data.get('cooler_type')
-        fans = form.cleaned_data.get('fans')
+        data = form.cleaned_data
+        if data['socket']:       qs = qs.filter(socket__in=data['socket'])
+        if data['cooler_type']:  qs = qs.filter(cooler_type__in=data['cooler_type'])
+        if data['fans']:         qs = qs.filter(brand__in=data['fans'])
+        if data['price_min']:    qs = qs.filter(price__gte=data['price_min'])
+        if data['price_max']:    qs = qs.filter(price__lte=data['price_max'])
 
-        price_min = form.cleaned_data.get('price_min')
-        price_max = form.cleaned_data.get('price_max')
-
-        if socket:
-            cooler = cooler.filter(socket__in=socket)
-
-        if cooler_type:
-            cooler = cooler.filter(cooler_type__in=cooler_type)
-
-        if fans:
-            cooler = cooler.filter(brand__in=fans)
-
-
-        if price_min is not None:
-            cooler = cooler.filter(price__gte=price_min)
-
-        if price_max is not None:
-            cooler = cooler.filter(price__lte=price_max)
-
-    context = {
-        'form': form,
-        'cooler': cooler,
-    }
-    return render(request, 'store/cooler.html', context)
+    return render(request, 'store/cooler.html',
+                  {'form': form, 'products': qs})
 
 def memory(request):
-    memory = Memory.objects.all()
+    qs = Memory.objects.all()
     form = MemoryFilterForm(request.GET or None)
+
     if form.is_valid():
-        digital_storage = form.cleaned_data.get('digital_storage')
-        interface_pci = form.cleaned_data.get('interface_pci')
-        fans = form.cleaned_data.get('fans')
+        data = form.cleaned_data
+        if data['digital_storage']: qs = qs.filter(digital_storage__in=data['digital_storage'])
+        if data['interface_pci']:   qs = qs.filter(interface_pci__in=data['interface_pci'])
+        if data['fans']:            qs = qs.filter(brand__in=data['fans'])
+        if data['price_min']:       qs = qs.filter(price__gte=data['price_min'])
+        if data['price_max']:       qs = qs.filter(price__lte=data['price_max'])
 
-        price_min = form.cleaned_data.get('price_min')
-        price_max = form.cleaned_data.get('price_max')
-
-        if digital_storage:
-            memory = memory.filter(digital_storage__in=digital_storage)
-
-        if interface_pci:
-            memory = memory.filter(interface_pci__in=interface_pci)
-
-        if fans:
-            memory = memory.filter(brand__in=fans)
-
-        if price_min is not None:
-            memory = memory.filter(price__gte=price_min)
-
-        if price_max is not None:
-            memory = memory.filter(price__lte=price_max)
-
-    context = {
-        'form': form,
-        'memory': memory,
-    }
-    return render(request, 'store/memory.html', context)
+    return render(request, 'store/memory.html',
+                  {'form': form, 'products': qs})
 
 
 
 def psu(request):
-    psu = PowerSupply.objects.all()
+    qs = PowerSupply.objects.all()
     form = PsuFilterForm(request.GET or None)
 
     if form.is_valid():
+        data = form.cleaned_data
+        if data['sertificate']: qs = qs.filter(certificate__in=data['sertificate'])
+        if data['fans']:        qs = qs.filter(brand__in=data['fans'])
+        if data['watt']:        qs = qs.filter(wattage__gte=data['watt'])
+        if data['price_min']:   qs = qs.filter(price__gte=data['price_min'])
+        if data['price_max']:   qs = qs.filter(price__lte=data['price_max'])
 
-        sertificate = form.cleaned_data.get('sertificate')
-        fans = form.cleaned_data.get('fans')
-        price_min = form.cleaned_data.get('price_min')
-        price_max = form.cleaned_data.get('price_max')
-        watt_min = form.cleaned_data.get('watt_min')
-        watt_max = form.cleaned_data.get('watt_max')
-        watt = form.cleaned_data.get('watt')
-        if sertificate:
-            psu = psu.filter(certificate__in=sertificate)
+    return render(request, 'store/psu.html',
+                  {'form': form, 'products': qs})
 
-        if fans:
-            psu = psu.filter(brand__in=fans)
-
-        if price_min is not None:
-            psu = psu.filter(price__gte=price_min)
-
-        if price_max is not None:
-            psu = psu.filter(price__lte=price_max)
-
-        if watt is not None:
-            psu = psu.filter(watt__gte=watt)
-
-
-    context = {
-        'form': form,
-        'psu': psu,
-    }
-    return render(request, 'store/psu.html', context)
 
 def case(request):
-    case = Case.objects.all()
+    qs = Case.objects.all()
     form = CaseFilterForm(request.GET or None)
+
     if form.is_valid():
-        type_size = form.cleaned_data.get('type_size')
-        form_factor = form.cleaned_data.get('form_factor')
-        fans = form.cleaned_data.get('fans')
+        data = form.cleaned_data
+        if data['type_size']:   qs = qs.filter(type_size__in=data['type_size'])
+        if data['form_factor']: qs = qs.filter(form_factor__in=data['form_factor'])
+        if data['fans']:        qs = qs.filter(brand__in=data['fans'])
+        if data['price_min']:   qs = qs.filter(price__gte=data['price_min'])
+        if data['price_max']:   qs = qs.filter(price__lte=data['price_max'])
 
-        price_min = form.cleaned_data.get('price_min')
-        price_max = form.cleaned_data.get('price_max')
-
-        if type_size:
-            case = case.filter(type_size__in=type_size)
-
-        if form_factor:
-            case = case.filter(form_factor__in=form_factor)
-
-        if fans:
-            case = case.filter(brand__in=fans)
-
-        if price_min is not None:
-            case = case.filter(price__gte=price_min)
-
-        if price_max is not None:
-            case = case.filter(price__lte=price_max)
-    else:
-        print(form.errors)
-    context = {
-        'form': form,
-        'case': case,
-    }
-    return render(request, 'store/case.html', context)
+    return render(request, 'store/case.html',
+                  {'form': form, 'products': qs})
 
 def motherboard(request):
-    motherboard = Motherboard.objects.all()
+    qs = Motherboard.objects.all()
     form = MotherboardFilterForm(request.GET or None)
+
     if form.is_valid():
-        socket = form.cleaned_data.get('socket')
-        form_factor = form.cleaned_data.get('form_factor')
-        fans = form.cleaned_data.get('fans')
+        data = form.cleaned_data
+        if data['socket']:      qs = qs.filter(socket__in=data['socket'])
+        if data['form_factor']: qs = qs.filter(form_factor__in=data['form_factor'])
+        if data['fans']:        qs = qs.filter(brand__in=data['fans'])
+        if data['price_min']:   qs = qs.filter(price__gte=data['price_min'])
+        if data['price_max']:   qs = qs.filter(price__lte=data['price_max'])
 
-        price_min = form.cleaned_data.get('price_min')
-        price_max = form.cleaned_data.get('price_max')
-
-        if socket:
-            motherboard = motherboard.filter(socket__in=socket)
-
-        if form_factor:
-            motherboard = motherboard.filter(form_factor__in=form_factor)
-
-        if fans:
-            motherboard = motherboard.filter(brand__in=fans)
-
-        if price_min is not None:
-            motherboard = motherboard.filter(price__gte=price_min)
-
-        if price_max is not None:
-            motherboard = motherboard.filter(price__lte=price_max)
-
-    context = {
-        'form': form,
-        'motherboard': motherboard,
-    }
-    return render(request, 'store/motherboard.html', context)
+    return render(request, 'store/motherboard.html',
+                  {'form': form, 'products': qs})
 
 
 def ram(request):
-    ram = RAM.objects.all()
+    qs = RAM.objects.all()
     form = RamFilterForm(request.GET or None)
+
     if form.is_valid():
-        memory_type = form.cleaned_data.get('memory_type')
-        memory = form.cleaned_data.get('memory')
-        fans = form.cleaned_data.get('fans')
+        data = form.cleaned_data
+        if data['memory_type']: qs = qs.filter(memory_type__in=data['memory_type'])
+        if data['memory']:      qs = qs.filter(memory__in=data['memory'])
+        if data['fans']:        qs = qs.filter(brand__in=data['fans'])
+        if data['price_min']:   qs = qs.filter(price__gte=data['price_min'])
+        if data['price_max']:   qs = qs.filter(price__lte=data['price_max'])
 
-        price_min = form.cleaned_data.get('price_min')
-        price_max = form.cleaned_data.get('price_max')
-
-        if memory_type:
-            ram = ram.filter(memory_type__in=memory_type)
-
-        if memory:
-            ram = ram.filter(memory__in=memory)
-
-        if fans:
-            ram = ram.filter(brand__in=fans)
-
-        if price_min is not None:
-            ram = ram.filter(price__gte=price_min)
-
-        if price_max is not None:
-            ram = ram.filter(price__lte=price_max)
-
-    context = {
-        'form': form,
-        'ram': ram,
-    }
-    return render(request, 'store/ram.html', context)
+    return render(request, 'store/ram.html',
+                  {'form': form, 'products': qs})
 
 
-
-def detect_category(query):
-    query_lower = query.lower()
-
-
-    if any(kw in query_lower for kw in ['i3', 'i5', 'i7', 'i9', 'ryzen', 'intel', '12400', '9800x3d', '13100']):
-        return 'cpu'
-
-
-    elif any(kw in query_lower for kw in ['rtx', 'gtx', 'rx', 'geforce', 'radeon', '5060','4069','7700','4070']):
-        return 'GPU'
-
-
-    elif any(kw in query_lower for kw in ['motherboard', 'mobo', 'b550', 'z490', 'a520']):
-        return 'Motherboard'
-
-    elif any(kw in query_lower for kw in ['корпус', 'h510', 'ck560', 'inwin', 'define']):
-        return 'case'
-
-    elif any(kw in query_lower for kw in ['оперативная память', 'ram', 'g skill', 'viper', 'fury']):
-        return 'ram'
-
-    elif any(kw in query_lower for kw in ['бп', 'straight power', 'supernova', 'focus', 'rm750', 'блок питания', 650, '750', 850]):
-        return 'psu'
-
-    elif any(kw in query_lower for kw in ['ssd', 'ссд', 'adata', 'samsung', 'a2000']):
-        return 'memory'
-
-    elif any(kw in query_lower for kw in ['frozn', 'hyper', 'nh', 'dark', 'water']):
-        return 'cooler'
-    else:
-        return None
 
 
 def search_products(request):
     query = request.GET.get('search', '').strip()
-    cat = None
-    results = []
+    category = request.GET.get('category', '').strip()
     filter_form = None
+    results = []
 
-    # Инициализация всех queryset
-    gpus = GPU.objects.filter(
-        Q(product_name__icontains=query) |
-        Q(brand__icontains=query)
-    )
-    cpus = cpu.objects.filter(
-        Q(product_name__icontains=query) |
-        Q(brand__icontains=query)
-    )
-    motherboards = Motherboard.objects.filter(
-        Q(product_name__icontains=query) |
-        Q(brand__icontains=query) |
-        Q(socket__icontains=query)
-    )
-    rams = RAM.objects.filter(
-        Q(product_name__icontains=query) |
-        Q(brand__icontains=query)
-    )
-    psus = PowerSupply.objects.filter(
-        Q(product_name__icontains=query) |
-        Q(brand__icontains=query)
-    )
-    cases = Case.objects.filter(
-        Q(product_name__icontains=query) |
-        Q(brand__icontains=query)
-    )
-    memorys = Memory.objects.filter(
-        Q(product_name__icontains=query) |
-        Q(brand__icontains=query)
-    )
-    coolers = Cooler.objects.filter(
-        Q(product_name__icontains=query) |
-        Q(brand__icontains=query)
-    )
+    # Подготовка слов из запроса
+    keywords = query.lower().split()
 
-    # Определяем категорию и применяем фильтры
-    if gpus.exists():
-        cat = 'gpu'
-        filter_form = GpuFilterForm(request.GET or None)
-        results = gpus
+    # Получение queryset'ов с учетом ключевых слов
+    def keyword_filter(model, *fields):
+        q_objects = Q()
+        for word in keywords:
+            for field in fields:
+                q_objects |= Q(**{f"{field}__icontains": word})
+        return model.objects.filter(q_objects)
 
-        if filter_form.is_valid():
-            data = filter_form.cleaned_data
+    gpus = keyword_filter(GPU, 'product_name', 'brand')
+    cpus = keyword_filter(cpu, 'product_name', 'brand')
+    motherboards = keyword_filter(Motherboard, 'product_name', 'brand', 'socket')
+    rams = keyword_filter(RAM, 'product_name', 'brand')
+    psus = keyword_filter(PowerSupply, 'product_name', 'brand')
+    cases = keyword_filter(Case, 'product_name', 'brand')
+    memorys = keyword_filter(Memory, 'product_name', 'brand')
+    coolers = keyword_filter(Cooler, 'product_name', 'brand')
 
-            # Фильтрация по памяти (если поле раскомментировано)
-            if 'memory' in filter_form.fields and data.get('memory'):
-                results = results.filter(vram__in=data['memory'])
+    # Определяем категорию, если не указана
+    if not category:
+        if cpus.exists():
+            category = 'cpu'
+        elif gpus.exists():
+            category = 'gpu'
+        elif motherboards.exists():
+            category = 'motherboard'
+        elif rams.exists():
+            category = 'ram'
+        elif psus.exists():
+            category = 'psu'
+        elif cases.exists():
+            category = 'case'
+        elif memorys.exists():
+            category = 'memory'
+        elif coolers.exists():
+            category = 'cooler'
 
-            # Фильтрация по интерфейсу (если поле раскомментировано)
-            if 'interface' in filter_form.fields and data.get('interface'):
-                results = results.filter(pci__in=data['interface'])
-
-            # Фильтрация по бренду (fans)
-            if data.get('fans'):
-                results = results.filter(brand__in=data['fans'])
-
-            # Фильтрация по цене
-            if data.get('price_min'):
-                results = results.filter(price__gte=data['price_min'])
-            if data.get('price_max'):
-                results = results.filter(price__lte=data['price_max'])
-
-    elif cpus.exists():
-        cat = 'cpu'
-        filter_form = CpuFilterForm(request.GET or None)
+    # Применяем фильтры к выбранной категории
+    if category == 'cpu':
         results = cpus
-
+        filter_form = CpuFilterForm(request.GET)
         if filter_form.is_valid():
             data = filter_form.cleaned_data
-
-            if 'socket' in filter_form.fields and data.get('socket'):
-                results = results.filter(socket__in=data['socket'])
-
-            if 'cores' in filter_form.fields and data.get('cores'):
-                results = results.filter(cores__in=data['cores'])
-
-            if data.get('fans'):
-                results = results.filter(brand__in=data['fans'])
-
-            if data.get('price_min'):
-                results = results.filter(price__gte=data['price_min'])
-            if data.get('price_max'):
-                results = results.filter(price__lte=data['price_max'])
-
-    # Аналогичные блоки для остальных категорий (motherboard, ram, psu, case, memory, cooler)
-    # Шаблон такой же, меняются только названия полей
-
-    elif motherboards.exists():
-        cat = 'motherboard'
-        filter_form = MotherboardFilterForm(request.GET or None)
-        results = motherboards
-
-        if filter_form.is_valid():
-            data = filter_form.cleaned_data
-
             if data.get('socket'):
                 results = results.filter(socket__in=data['socket'])
-
-            if data.get('form_factor'):
-                results = results.filter(form_factor__in=data['form_factor'])
-
+            if data.get('cores'):
+                results = results.filter(cores__in=data['cores'])
             if data.get('fans'):
                 results = results.filter(brand__in=data['fans'])
-
             if data.get('price_min'):
                 results = results.filter(price__gte=data['price_min'])
             if data.get('price_max'):
                 results = results.filter(price__lte=data['price_max'])
 
-    elif rams.exists():
-        cat = 'ram'
-        filter_form = RamFilterForm(request.GET or None)
-        results = rams
-
+    elif category == 'gpu':
+        results = gpus
+        filter_form = GpuFilterForm(request.GET)
         if filter_form.is_valid():
             data = filter_form.cleaned_data
+            if data.get('memory'):
+                results = results.filter(vram__in=data['memory'])
+            if data.get('interface'):
+                results = results.filter(pci__in=data['interface'])
+            if data.get('fans'):
+                results = results.filter(brand__in=data['fans'])
+            if data.get('price_min'):
+                results = results.filter(price__gte=data['price_min'])
+            if data.get('price_max'):
+                results = results.filter(price__lte=data['price_max'])
 
+    elif category == 'motherboard':
+        results = motherboards
+        filter_form = MotherboardFilterForm(request.GET)
+        if filter_form.is_valid():
+            data = filter_form.cleaned_data
+            if data.get('socket'):
+                results = results.filter(socket__in=data['socket'])
+            if data.get('form_factor'):
+                results = results.filter(form_factor__in=data['form_factor'])
+            if data.get('fans'):
+                results = results.filter(brand__in=data['fans'])
+            if data.get('price_min'):
+                results = results.filter(price__gte=data['price_min'])
+            if data.get('price_max'):
+                results = results.filter(price__lte=data['price_max'])
+
+    elif category == 'ram':
+        results = rams
+        filter_form = RamFilterForm(request.GET)
+        if filter_form.is_valid():
+            data = filter_form.cleaned_data
             if data.get('memory_type'):
                 results = results.filter(memory_type__in=data['memory_type'])
-
             if data.get('memory'):
                 results = results.filter(one_module_memory__in=data['memory'])
-
             if data.get('fans'):
                 results = results.filter(brand__in=data['fans'])
-
             if data.get('price_min'):
                 results = results.filter(price__gte=data['price_min'])
             if data.get('price_max'):
                 results = results.filter(price__lte=data['price_max'])
 
-    elif psus.exists():
-        cat = 'psu'
-        filter_form = PsuFilterForm(request.GET or None)
+    elif category == 'psu':
         results = psus
-
+        filter_form = PsuFilterForm(request.GET)
         if filter_form.is_valid():
             data = filter_form.cleaned_data
-
             if data.get('sertificate'):
                 results = results.filter(certificate__in=data['sertificate'])
-
             if data.get('fans'):
                 results = results.filter(brand__in=data['fans'])
-
             if data.get('watt'):
                 results = results.filter(wattage__gte=data['watt'])
-
             if data.get('price_min'):
                 results = results.filter(price__gte=data['price_min'])
             if data.get('price_max'):
                 results = results.filter(price__lte=data['price_max'])
 
-
-
-
-    elif cases.exists():
-        cat = 'case'
-        filter_form = CaseFilterForm(request.GET or None)
+    elif category == 'case':
         results = cases
-
+        filter_form = CaseFilterForm(request.GET)
         if filter_form.is_valid():
             data = filter_form.cleaned_data
-
             if data.get('type_size'):
                 results = results.filter(type_size__in=data['type_size'])
-
             if data.get('form_factor'):
                 results = results.filter(form_factor__in=data['form_factor'])
-
             if data.get('fans'):
                 results = results.filter(brand__in=data['fans'])
-
             if data.get('price_min'):
                 results = results.filter(price__gte=data['price_min'])
             if data.get('price_max'):
                 results = results.filter(price__lte=data['price_max'])
 
-    elif memorys.exists():
-        cat = 'memory'
-        filter_form = MemoryFilterForm(request.GET or None)
+    elif category == 'memory':
         results = memorys
-
+        filter_form = MemoryFilterForm(request.GET)
         if filter_form.is_valid():
             data = filter_form.cleaned_data
-
             if data.get('digital_storage'):
                 results = results.filter(digital_storage__in=data['digital_storage'])
-
             if data.get('interface_pci'):
                 results = results.filter(interface_pci__in=data['interface_pci'])
-
             if data.get('fans'):
                 results = results.filter(brand__in=data['fans'])
-
             if data.get('price_min'):
                 results = results.filter(price__gte=data['price_min'])
             if data.get('price_max'):
                 results = results.filter(price__lte=data['price_max'])
 
-    elif coolers.exists():
-        cat = 'cooler'
-        filter_form = CoolerFilterForm(request.GET or None)
+    elif category == 'cooler':
         results = coolers
-
+        filter_form = CoolerFilterForm(request.GET)
         if filter_form.is_valid():
             data = filter_form.cleaned_data
-
             if data.get('socket'):
                 results = results.filter(socket__in=data['socket'])
-
             if data.get('cooler_type'):
                 results = results.filter(cooler_type__in=data['cooler_type'])
-
             if data.get('fans'):
                 results = results.filter(brand__in=data['fans'])
-
             if data.get('price_min'):
                 results = results.filter(price__gte=data['price_min'])
             if data.get('price_max'):
                 results = results.filter(price__lte=data['price_max'])
 
     return render(request, 'store/search_results.html', {
-        'query': query,
-        'category': cat,
         'results': results,
+        'query': query,
+        'category': category,
         'form': filter_form,
     })
+MODEL_MAP = {
+    'cpu': cpu,
+    'gpu': GPU,
+    'ram': RAM,
+    'psu': PowerSupply,
+    'powersupply': PowerSupply,
+    'cooler': Cooler,
+    'memory': Memory,
+    'case': Case,
+    'motherboard': Motherboard
 
-def azov(request):
-    return render(request, 'store/product.html')
+}
+logger = logging.getLogger(__name__)
+def component_detail(request, component, pk):
+    logger.warning(f"component_detail called with component={component}, pk={pk}")
+    Model = MODEL_MAP.get(component)
+    if Model is None:
+        logger.error(f"MODEL_MAP does not contain component={component}")
+        raise Http404("Component not found")
+
+    product = get_object_or_404(Model, pk=pk)
+
+    related = Model.objects.exclude(pk=pk)[:4]
+    logger.warning(f"Found product: {product}")
+    template = select_template([
+        f"store/product_detail/{component}_product_detail.html",
+        "store/product_detail/product_detail.html",
+    ])
+    logging.warning("USING template=%s", template.template.name)
+
+    return render(request, template.template.name,
+                  {'product': product, 'related': related})

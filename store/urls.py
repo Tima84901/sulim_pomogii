@@ -19,7 +19,8 @@ urlpatterns = [
     path('motherboard/', views.motherboard, name='motherboard'),
     path('ram/', views.ram, name='ram'),
     path('search/', views.search_products, name='search'),
-    path('azov/', views.azov, name='azov')
+    path('<str:component>/<int:pk>/', views.component_detail, name='component_detail'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

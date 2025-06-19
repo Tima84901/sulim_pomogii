@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+  <h2>reeee</h2>
+  <h1>{{ product.brand }} {{ product.product_name }}</h1>
+  <p class="lead">{{ product.price }} ₽</p>
+  <img src="{% static product.image %}" class="img-fluid mb-4" alt="">
+  <!-- добавьте описания / характеристики по желанию -->
+</div>
+{% endblock %}

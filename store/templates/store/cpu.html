@@ -65,8 +65,8 @@
         </div>
 
         <!-- Список карточек -->
-{% for i in cpu %}
-{% include 'store/cards/cpu_card.html' %}
+{% for product  in products  %}
+{% include 'store/cards/cpu_card.html' with product=product %}
 {% endfor %}
           <!-- Добавьте дополнительные карточки аналогично... -->
 

@@ -1,5 +1,7 @@
         <form method="get" action="{% url 'search' %}" class="bg-white p-4 rounded shadow-sm filter-sidebar">
           <h2 class="h5 mb-4">
+              <input type="hidden" name="search" value="{{ query }}">
+<input type="hidden" name="category" value="{{ category }}">
               <input type="hidden" name="search" value="{{ request.GET.search }}">
               <i class="fas fa-filter me-2 text-primary"></i>Фильтры
           </h2>

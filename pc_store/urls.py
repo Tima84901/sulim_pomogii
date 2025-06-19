@@ -18,10 +18,17 @@ from django.contrib import admin
 from django.urls import path, include
 from store import views
 from store.views import page_not_found
+from django.contrib.auth import views as auth_views
+from users import views as user_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('store.urls'))
+    path('', include('store.urls')),
+    path('users/', include('users.urls')),
+    path('users/', include('django.contrib.auth.urls')),
+    path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
+
 ]
 
 handler404 = page_not_found
