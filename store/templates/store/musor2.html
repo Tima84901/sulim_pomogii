@@ -1,379 +1,238 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Каталог видеокарт</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        .price-tag {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-    </style>
-</head>
-<body class="bg-gray-50">
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-8">Каталог видеокарт</h1>
-        
-        <div class="flex flex-col lg:flex-row gap-8">
-            <!-- Фильтр -->
-            <div class="w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-md h-fit sticky top-4">
-                <div class="mb-6">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700 flex items-center">
-                        <i class="fas fa-filter mr-2 text-blue-500"></i> Фильтры
-                    </h2>
-                    
-                    <!-- Поиск -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Поиск</label>
-                        <div class="relative">
-                            <input type="text" placeholder="Название видеокарты..." 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <button class="absolute right-2 top-2 text-gray-500 hover:text-blue-500">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Производитель -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Производитель</label>
-                        <div class="space-y-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" class="rounded text-blue-500" checked>
-                                <span class="ml-2 text-gray-700">NVIDIA</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" class="rounded text-blue-500" checked>
-                                <span class="ml-2 text-gray-700">AMD</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" class="rounded text-blue-500">
-                                <span class="ml-2 text-gray-700">Intel</span>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <!-- Ценовой диапазон -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Цена, ₽</label>
-                        <div class="flex items-center space-x-4">
-                            <input type="number" placeholder="От" 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                            <span class="text-gray-500">—</span>
-                            <input type="number" placeholder="До" 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                        </div>
-                    </div>
-                    
-                    <!-- Объем памяти -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Объем памяти, ГБ</label>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button class="px-3 py-1 bg-blue-500 text-white rounded-lg text-sm">4</button>
-                            <button class="px-3 py-1 bg-gray-200 hover:bg-blue-500 hover:text-white rounded-lg text-sm">6</button>
-                            <button class="px-3 py-1 bg-gray-200 hover:bg-blue-500 hover:text-white rounded-lg text-sm">8</button>
-                            <button class="px-3 py-1 bg-gray-200 hover:bg-blue-500 hover:text-white rounded-lg text-sm">12</button>
-                            <button class="px-3 py-1 bg-gray-200 hover:bg-blue-500 hover:text-white rounded-lg text-sm">16</button>
-                            <button class="px-3 py-1 bg-gray-200 hover:bg-blue-500 hover:text-white rounded-lg text-sm">24</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Тип памяти -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Тип памяти</label>
-                        <div class="space-y-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" class="rounded text-blue-500" checked>
-                                <span class="ml-2 text-gray-700">GDDR6</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" class="rounded text-blue-500" checked>
-                                <span class="ml-2 text-gray-700">GDDR5</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" class="rounded text-blue-500">
-                                <span class="ml-2 text-gray-700">GDDR4</span>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <!-- Кнопки фильтра -->
-                    <div class="flex space-x-3">
-                        <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition flex-1">
-                            Применить
-                        </button>
-                        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
-                            <i class="fas fa-redo"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Карточки товаров -->
-            <div class="w-full lg:w-3/4">
-                <!-- Сортировка -->
-                <div class="bg-white p-4 rounded-lg shadow-md mb-6 flex flex-wrap justify-between items-center">
-                    <div class="text-sm text-gray-600 mb-2 sm:mb-0">
-                        Найдено <span class="font-bold">12</span> товаров
-                    </div>
-                    <div class="flex items-center">
-                        <label class="text-sm text-gray-600 mr-2">Сортировка:</label>
-                        <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
-                            <option>По популярности</option>
-                            <option>По возрастанию цены</option>
-                            <option>По убыванию цены</option>
-                            <option>По новизне</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <!-- Список карточек -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Карточка 1 -->
-                    <div class="bg-white rounded-lg overflow-hidden shadow-md transition duration-300 card-hover relative">
-                        <div class="price-tag">56 990 ₽</div>
-                        <div class="p-4">
-                            <img src="https://img.icons8.com/color/96/000000/gpu.png" alt="Видеокарта" class="w-full h-48 object-contain mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-2">NVIDIA GeForce RTX 3060 Ti</h3>
-                            <div class="flex flex-wrap gap-2 mb-3">
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">8 ГБ GDDR6</span>
-                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">PCI-E 4.0</span>
-                                <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">3 вентилятора</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-yellow-400">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <span class="text-gray-600 text-sm ml-1">4.7</span>
-                                </div>
-                                <button class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-sm">
-                                    <i class="fas fa-shopping-cart mr-1"></i> Купить
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Карточка 2 -->
-                    <div class="bg-white rounded-lg overflow-hidden shadow-md transition duration-300 card-hover relative">
-                        <div class="price-tag">89 990 ₽</div>
-                        <div class="p-4">
-                            <img src="https://img.icons8.com/color/96/000000/gpu.png" alt="Видеокарта" class="w-full h-48 object-contain mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-2">NVIDIA GeForce RTX 3070</h3>
-                            <div class="flex flex-wrap gap-2 mb-3">
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">8 ГБ GDDR6</span>
-                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">PCI-E 4.0</span>
-                                <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">2 вентилятора</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-yellow-400">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <span class="text-gray-600 text-sm ml-1">5.0</span>
-                                </div>
-                                <button class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-sm">
-                                    <i class="fas fa-shopping-cart mr-1"></i> Купить
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Карточка 3 -->
-                    <div class="bg-white rounded-lg overflow-hidden shadow-md transition duration-300 card-hover relative">
-                        <div class="price-tag">124 990 ₽</div>
-                        <div class="p-4">
-                            <img src="https://img.icons8.com/color/96/000000/gpu.png" alt="Видеокарта" class="w-full h-48 object-contain mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-2">NVIDIA GeForce RTX 3080</h3>
-                            <div class="flex flex-wrap gap-2 mb-3">
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">10 ГБ GDDR6X</span>
-                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">PCI-E 4.0</span>
-                                <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">3 вентилятора</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-yellow-400">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <span class="text-gray-600 text-sm ml-1">4.8</span>
-                                </div>
-                                <button class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-sm">
-                                    <i class="fas fa-shopping-cart mr-1"></i> Купить
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Карточка 4 -->
-                    <div class="bg-white rounded-lg overflow-hidden shadow-md transition duration-300 card-hover relative">
-                        <div class="price-tag">42 990 ₽</div>
-                        <div class="p-4">
-                            <img src="https://img.icons8.com/color/96/000000/gpu.png" alt="Видеокарта" class="w-full h-48 object-contain mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-2">AMD Radeon RX 6600 XT</h3>
-                            <div class="flex flex-wrap gap-2 mb-3">
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">8 ГБ GDDR6</span>
-                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">PCI-E 4.0</span>
-                                <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">2 вентилятора</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-yellow-400">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <span class="text-gray-600 text-sm ml-1">4.2</span>
-                                </div>
-                                <button class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-sm">
-                                    <i class="fas fa-shopping-cart mr-1"></i> Купить
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Карточка 5 -->
-                    <div class="bg-white rounded-lg overflow-hidden shadow-md transition duration-300 card-hover relative">
-                        <div class="price-tag">68 990 ₽</div>
-                        <div class="p-4">
-                            <img src="https://img.icons8.com/color/96/000000/gpu.png" alt="Видеокарта" class="w-full h-48 object-contain mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-2">AMD Radeon RX 6700 XT</h3>
-                            <div class="flex flex-wrap gap-2 mb-3">
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">12 ГБ GDDR6</span>
-                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">PCI-E 4.0</span>
-                                <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">3 вентилятора</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-yellow-400">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <span class="text-gray-600 text-sm ml-1">4.6</span>
-                                </div>
-                                <button class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-sm">
-                                    <i class="fas fa-shopping-cart mr-1"></i> Купить
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Карточка 6 -->
-                    <div class="bg-white rounded-lg overflow-hidden shadow-md transition duration-300 card-hover relative">
-                        <div class="price-tag">159 990 ₽</div>
-                        <div class="p-4">
-                            <img src="https://img.icons8.com/color/96/000000/gpu.png" alt="Видеокарта" class="w-full h-48 object-contain mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-2">NVIDIA GeForce RTX 3090</h3>
-                            <div class="flex flex-wrap gap-2 mb-3">
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">24 ГБ GDDR6X</span>
-                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">PCI-E 4.0</span>
-                                <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">3 вентилятора</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center text-yellow-400">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <span class="text-gray-600 text-sm ml-1">5.0</span>
-                                </div>
-                                <button class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-sm">
-                                    <i class="fas fa-shopping-cart mr-1"></i> Купить
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Пагинация -->
-                <div class="mt-8 flex justify-center">
-                    <nav class="inline-flex rounded-md shadow">
-                        <a href="#" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-                            <i class="fas fa-chevron-left"></i>
-                        </a>
-                        <a href="#" class="px-4 py-2 border-t border-b border-gray-300 bg-white text-blue-600 font-medium">1</a>
-                        <a href="#" class="px-4 py-2 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">2</a>
-                        <a href="#" class="px-4 py-2 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">3</a>
-                        <a href="#" class="px-4 py-2 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">4</a>
-                        <a href="#" class="px-4 py-2 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">5</a>
-                        <a href="#" class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-                            <i class="fas fa-chevron-right"></i>
-                        </a>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
+# recommender/views.py
+from decimal import Decimal
 
-    <script>
-        // Простой скрипт для демонстрации работы фильтров
-        document.addEventListener('DOMContentLoaded', function() {
-            // Обработка кликов по кнопкам объема памяти
-            const memoryButtons = document.querySelectorAll('.grid.grid-cols-3 button');
-            memoryButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    memoryButtons.forEach(btn => {
-                        btn.classList.remove('bg-blue-500', 'text-white');
-                        btn.classList.add('bg-gray-200', 'hover:bg-blue-500', 'hover:text-white');
-                    });
-                    this.classList.remove('bg-gray-200', 'hover:bg-blue-500', 'hover:text-white');
-                    this.classList.add('bg-blue-500', 'text-white');
-                });
-            });
-            
-            // Обработка кликов по звездам рейтинга
-            const ratingStars = document.querySelectorAll('.fa-star, .fa-star-half-alt, .far.fa-star');
-            ratingStars.forEach(star => {
-                star.addEventListener('click', function() {
-                    const ratingContainer = this.parentElement;
-                    const stars = ratingContainer.querySelectorAll('i');
-                    const clickedIndex = Array.from(stars).indexOf(this);
-                    
-                    stars.forEach((star, index) => {
-                        if (index <= clickedIndex) {
-                            star.classList.remove('far', 'fa-star-half-alt');
-                            star.classList.add('fas', 'fa-star');
-                        } else {
-                            star.classList.remove('fas', 'fa-star');
-                            star.classList.add('far', 'fa-star');
-                        }
-                    });
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+from django.shortcuts import render
+from django.db.models import F, Q
+
+from .forms import RecommendationForm
+from store.models import (
+    cpu as CPU,
+    GPU,
+    Motherboard,
+    RAM,
+    Cooler,
+    Case,
+    PowerSupply,
+    Memory,
+)
+
+# ----------------------------------------------------------
+# 1. «вес» компонентов в зависимости от сценария
+# ----------------------------------------------------------
+BUDGET_ALLOCATION = {
+    "gaming":   dict(cpu=0.25, gpu=0.40),
+    "editing":  dict(cpu=0.35, gpu=0.30),
+    "work":     dict(cpu=0.40, gpu=0.20),
+    "home":     dict(cpu=0.25, gpu=0.20),
+}
+
+# ----------------------------------------------------------
+# 2. Минимальные рекомендации по объёму RAM / диска
+# ----------------------------------------------------------
+MIN_RAM_GB = {
+    "gaming": 16,
+    "editing": 32,
+    "work": 32,
+    "home": 16,
+}
+MIN_SSD_GB = 500
+
+
+# ----------------------------------------------------------
+# 3. Вспомогательные фильтры
+# ----------------------------------------------------------
+def brand_q(brands, field_name="brand"):
+    """Возвращает Q-объект с фильтром по списку брендов."""
+    if not brands:
+        return Q()
+    return Q(**{f"{field_name}__in": brands})
+
+
+# ----------------------------------------------------------
+# 4. Основной алгоритм подбора
+# ----------------------------------------------------------
+def recommend_build(budget: int, purpose: str, preferred_brands_raw: str):
+    budget = Decimal(budget)
+    purpose = purpose or "home"
+    preferred_brands = [b.strip().title() for b in preferred_brands_raw.split(",") if b.strip()]
+
+    # 4.1. Определяем потолки расходов
+    alloc = BUDGET_ALLOCATION.get(purpose, BUDGET_ALLOCATION["home"])
+    cpu_limit = budget * Decimal(alloc["cpu"])
+    gpu_limit = budget * Decimal(alloc["gpu"])
+
+    # 4.2. Кандидаты CPU и GPU
+    cpu_qs = (
+        CPU.objects.filter(price__lte=cpu_limit)
+        .order_by("-benchmark_score", "price")  # лучший индекс / дешевле
+    )
+    gpu_qs = (
+        GPU.objects.filter(price__lte=gpu_limit)
+        .order_by("-performance_score", "price")
+    )
+    if preferred_brands:
+        cpu_qs = cpu_qs.filter(brand_q(preferred_brands))
+        gpu_qs = gpu_qs.filter(brand_q(preferred_brands))
+
+    # 4.3. Итерируем CPU → к нему подбираем всё остальное
+    for cpu in cpu_qs:
+        # 4.3.1. Материнка совместимая по сокету + памяти
+        mb_qs = (
+            Motherboard.objects.filter(socket=cpu.socket, price__lte=budget * Decimal(0.15))
+            .order_by("-m2_slots", "price")
+        )
+        if preferred_brands:
+            mb_qs = mb_qs.filter(brand_q(preferred_brands))
+        for mb in mb_qs:
+            # 4.3.2. GPU (берём первую, раз уж они отсортированы по производительности)
+            gpu = gpu_qs.first()
+            if not gpu:
+                continue
+
+            # 4.3.3. Память (RAM) подходящего типа и объёма
+            ram_needed = MIN_RAM_GB[purpose]
+            ram = (
+                RAM.objects.filter(
+                    memory_type=mb.memory_type,
+                    memory__gte=ram_needed,
+                    price__lte=budget * Decimal(0.12),
+                )
+                .order_by("price", "-hertz")
+                .first()
+            )
+            if not ram:
+                continue
+
+            # 4.3.4. SSD / NVMe
+            ssd = (
+                Memory.objects.filter(
+                    digital_storage__gte=MIN_SSD_GB,
+                    price__lte=budget * Decimal(0.10),
+                )
+                .order_by("price", "-read_speed")
+                .first()
+            )
+            if not ssd:
+                continue
+
+            # 4.3.5. Кулер (по сокету, по высоте, по TDP)
+            cooler_qs = Cooler.objects.filter(
+                socket__icontains=cpu.socket,
+                tdp__gte=cpu.tdp or 65,
+            ).order_by("price")
+            if preferred_brands:
+                cooler_qs = cooler_qs.filter(brand_q(preferred_brands))
+            cooler = cooler_qs.first()
+            if not cooler:
+                continue
+
+            # 4.3.6. Корпус, куда всё влезет
+            case_qs = Case.objects.filter(
+                max_gpu_length_mm__gte=gpu.length_mm,
+                max_cooler_height_mm__gte=cooler.height_mm,
+                max_psu_length_mm__gte=140,
+            ).order_by("price")
+            if preferred_brands:
+                case_qs = case_qs.filter(brand_q(preferred_brands))
+            case = case_qs.first()
+            if not case:
+                continue
+
+            # 4.3.7. Блок питания с запасом
+            total_power = int((cpu.tdp or 65) + gpu.power_draw_w + 100)
+            psu_qs = (
+                PowerSupply.objects.filter(wattage__gte=total_power * 1.25)
+                .order_by("price")
+            )
+            if preferred_brands:
+                psu_qs = psu_qs.filter(brand_q(preferred_brands))
+            psu = psu_qs.first()
+            if not psu:
+                continue
+
+            # 4.3.8. Проверяем, уложились ли в бюджет
+            parts = [cpu, gpu, mb, ram, ssd, cooler, case, psu]
+            total_price = sum(map(lambda p: p.price, parts))
+            if total_price <= budget:
+                return dict(
+                    cpu=cpu,
+                    gpu=gpu,
+                    motherboard=mb,
+                    ram=ram,
+                    storage=ssd,
+                    cooler=cooler,
+                    case=case,
+                    psu=psu,
+                    total_price=total_price,
+                )
+
+    # не нашли подходящей сборки
+    return None
+
+
+# ----------------------------------------------------------
+# 5. Представление (view)
+# ----------------------------------------------------------
+def recommender_view(request):
+    if request.method == "POST":
+        form = RecommendationForm(request.POST)
+        if form.is_valid():
+            build = recommend_build(
+                budget=form.cleaned_data["budget"],
+                purpose=form.cleaned_data["purpose"],
+                preferred_brands_raw=form.cleaned_data["preferred_brands"],
+            )
+            if build:
+                # сохраняем в сессии PK выбранных компонентов
+                request.session["last_build"] = {
+                    "cpu": build["cpu"].pk,
+                    "gpu": build["gpu"].pk,
+                    "motherboard": build["motherboard"].pk,
+                    "ram": build["ram"].pk,
+                    "storage": build["storage"].pk,
+                    "cooler": build["cooler"].pk,
+                    "case": build["case"].pk,
+                    "psu": build["psu"].pk,
+                    "total": str(build["total_price"]),
+                }
+                return redirect("recommender_result")   # ⬅️ редирект
+            else:
+                messages.warning(
+                    request,
+                    "Не удалось подобрать сборку: попробуйте увеличить бюджет "
+                    "или убрать ограничения по брендам.",
+                )
+                # падать не будем, покажем форму вновь
+    else:
+        form = RecommendationForm()
+
+    return render(request, "recommender/recommend.html", {"form": form})
+
+
+# ------------------------------------------------------------------
+# 2. отображаем результат GET‑запросом
+# ------------------------------------------------------------------
+def recommender_result_view(request):
+    build_ids = request.session.get("last_build")
+    if not build_ids:
+        messages.info(request, "Сначала задайте параметры подбора сборки.")
+        return redirect("recommender_view")
+
+    build = {
+        "cpu": CPU.objects.get(pk=build_ids["cpu"]),
+        "gpu": GPU.objects.get(pk=build_ids["gpu"]),
+        "motherboard": Motherboard.objects.get(pk=build_ids["motherboard"]),
+        "ram": RAM.objects.get(pk=build_ids["ram"]),
+        "storage": Memory.objects.get(pk=build_ids["storage"]),
+        "cooler": Cooler.objects.get(pk=build_ids["cooler"]),
+        "case": Case.objects.get(pk=build_ids["case"]),
+        "psu": PowerSupply.objects.get(pk=build_ids["psu"]),
+        "total_price": Decimal(build_ids["total"]),
+    }
+
+    form = RecommendationForm()  # показ для «подобрать заново»
+    return render(
+        request,
+        "recommender/recommendation_result.html",
+        {"form": form, "build": build},
+    )

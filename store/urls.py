@@ -21,6 +21,7 @@ urlpatterns = [
     path('search/', views.search_products, name='search'),
     path('<str:component>/<int:pk>/', views.component_detail, name='component_detail'),
 
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

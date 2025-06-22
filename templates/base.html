@@ -8,60 +8,180 @@
     <link type="text/css" href="{% static 'store/css/style.css' %}" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
-
-
- <link href="https://cdn.jsdelivr.net/npm/bootstrap @5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css ">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <title>{{ title }}</title>
     <style>
         .navbar-nav .nav-link {
-            font-size: 1.5rem; /* Увеличение размера текста для ссылок */
+            font-size: 1.5rem;
         }
         .form-control {
-            height: 50px; /* Увеличение высоты строки поиска */
-            font-size: 1.25rem; /* Увеличение размера текста в строке поиска */
+            height: 50px;
+            font-size: 1.25rem;
         }
         .btn {
-            height: 50px; /* Увеличение высоты кнопок */
-            font-size: 1.25rem; /* Увеличение размера текста на кнопках */
+            height: 50px;
+            font-size: 1.25rem;
         }
         .bi {
-            font-size: 1.5rem; /* Увеличение размера иконок */
+            font-size: 1.5rem;
         }
         .container {
-        padding-top:50px;
+            padding-top: 50px;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
         }
 
-        html, body {
-    height: 100%;
-    margin: 0;
+        /* Стили для модальных окон */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            animation: modalopen 0.3s;
+        }
+
+        @keyframes modalopen {
+            from {opacity: 0; transform: translateY(-50px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 1.2rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1.1rem;
+        }
+
+        .form-group input:focus {
+            border-color: #4a90e2;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+
+        .auth-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .auth-btn:hover {
+            background-color: #3a7bc8;
+        }
+
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+
+        .switch-form a {
+            color: #4a90e2;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .switch-form a:hover {
+            text-decoration: underline;
+        }
+
+        .nav-auth-link {
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0.5rem 1rem;
+            color: black;
+        }
+
+        /* Стили для сообщений об ошибках */
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        .zov {
+        color:black;
+        cursor: pointer;
+        font-size:15px;
+        }
+
+        .nav-link .badge {
+    font-size: 0.6rem;
+    padding: 0.25em 0.4em;
+    display: none; /* Скрываем по умолчанию */
 }
+
+.nav-link .badge.show {
+    display: block; /* Показываем когда есть товары */
+}
+
     </style>
     {% block extra_css %}
-
     {% endblock %}
 </head>
 <body>
 <header>
-
-
-<ul class="nav justify-content-center">
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="{% url 'about' %}">О магазине</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'warranty' %}">Гарантия и возврат</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'delivery' %}">Доставка</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'contacts' %}">Контакты</a>
-  </li>
+    <ul class="nav justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'about' %}">О магазине</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'warranty' %}">Гарантия и возврат</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'delivery' %}">Доставка</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'contacts' %}">Контакты</a>
+        </li>
     </ul>
 
     <!-- Навигация -->
@@ -78,10 +198,10 @@
                     <!-- Левая группа -->
                     <ul class="navbar-nav me-3">
                         <li class="nav-item">
-                            <a class="nav-link active" href="{% url 'home' %}">Главная</a>
+                            <a class="nav-link active zov" href="{% url 'home' %}">Главная</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Products</a>
+                            <a class="nav-link zov" href="{% url 'recommender_view' %}">Подобрать сборку</a>
                         </li>
                     </ul>
 
@@ -94,13 +214,41 @@
                     </div>
 
                     <!-- Правая группа -->
-                    <ul class="navbar-nav ms-3">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="bi bi-person"></i></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="bi bi-cart"></i></a>
-                        </li>
+                    <ul class="navbar-nav ms-3 d-flex align-items-center">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link nav-auth-link zov" href="{% url 'profile' %}">Профиль</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-auth-link zov" href="{% url 'logout' %}">Выйти</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link nav-auth-link zov" onclick="openAuthModal('loginModal')">Войти</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-auth-link zov" onclick="openAuthModal('registerModal')">Регистрация</a>
+                            </li>
+                        {% endif %}
+
+                        <div class="navbar-nav ml-auto">
+                            <a href="{% url 'cart:cart_detail' %}" class="nav-link position-relative">
+                                <i class="fas fa-shopping-cart"></i>
+                                Корзина
+                                <span id="cart-counter" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {% with total_items=cart|length %}
+                                        {% if total_items > 0 %}
+                                            {{ total_items }}
+                                        {% else %}
+                                            0
+                                        {% endif %}
+                                    {% endwith %}
+                                </span>
+                            </a>
+                            {% if cart_total_quantity > 0 %}
+                                <span class="cart-count-badge">{{ cart_total_quantity }}</span>
+                            {% endif %}
+                        </div>
                     </ul>
 
                 </div>
@@ -108,120 +256,282 @@
         </div>
     </nav>
     <!-- Навигация -->
-
 </header>
-{% block content %}
 
+{% block content %}
 {% endblock %}
+
+<!-- Модальное окно входа -->
+<div id="loginModal" class="auth-modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeAuthModal('loginModal')">&times;</span>
+        <h2 class="text-center mb-4">Вход в аккаунт</h2>
+        <form id="loginForm" method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Имя пользователя</label>
+                <input type="text" id="username" name="username" required>
+                <div id="username-error" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" required>
+                <div id="password-error" class="error-message"></div>
+            </div>
+            <button type="submit" class="auth-btn">Войти</button>
+            <div class="switch-form">
+                Нет аккаунта? <a onclick="switchAuthModal('loginModal', 'registerModal')">Зарегистрироваться</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно регистрации -->
+<div id="registerModal" class="auth-modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeAuthModal('registerModal')">&times;</span>
+        <h2 class="text-center mb-4">Создать аккаунт</h2>
+        <form id="registerForm" method="post" action="{% url 'register' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="reg-username">Имя пользователя</label>
+                <input type="text" id="reg-username" name="username" required>
+                <div id="reg-username-error" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="reg-email">Email</label>
+                <input type="email" id="reg-email" name="email" required>
+                <div id="reg-email-error" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="reg-phone">Телефон</label>
+                <input type="tel" id="reg-phone" name="phone">
+                <div id="reg-phone-error" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="reg-password1">Пароль</label>
+                <input type="password" id="reg-password1" name="password1" required>
+                <div id="reg-password1-error" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="reg-password2">Подтверждение пароля</label>
+                <input type="password" id="reg-password2" name="password2" required>
+                <div id="reg-password2-error" class="error-message"></div>
+            </div>
+            <button type="submit" class="auth-btn">Зарегистрироваться</button>
+            <div class="switch-form">
+                Уже есть аккаунт? <a onclick="switchAuthModal('registerModal', 'loginModal')">Войти</a>
+            </div>
+        </form>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script>
+    // Функции для управления модальными окнами
+    function openAuthModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+    }
 
+    function closeAuthModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+        // Очищаем ошибки при закрытии
+        clearErrors(modalId);
+    }
+
+    function switchAuthModal(fromModalId, toModalId) {
+        closeAuthModal(fromModalId);
+        openAuthModal(toModalId);
+    }
+
+    // Закрытие модального окна при клике вне его области
+    window.onclick = function(event) {
+        const modals = document.querySelectorAll('.auth-modal');
+        modals.forEach(modal => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                clearErrors(modal.id);
+            }
+        });
+    };
+
+    // Очистка ошибок
+    function clearErrors(modalId) {
+        const errorElements = document.querySelectorAll(`#${modalId} .error-message`);
+        errorElements.forEach(el => {
+            el.textContent = '';
+        });
+    }
+
+    // Обработка отправки форм через AJAX
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        handleFormSubmit(this, 'loginModal');
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        handleFormSubmit(this, 'registerModal');
+    });
+
+    function handleFormSubmit(form, modalId) {
+    const formData = new FormData(form);
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    // Показываем индикатор загрузки
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+    submitButton.textContent = 'Отправка...';
+    submitButton.disabled = true;
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        credentials: 'include'
+    })
+    .then(response => {
+        if (response.status === 403) {
+            throw new Error('CSRF verification failed. Please refresh the page.');
+        }
+        if (response.redirected) {
+            window.location.href = response.url;
+            return;
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (!data) return;
+        if (data.success) {
+            window.location.href = data.redirect || '/';
+        } else {
+            displayFormErrors(data.errors || {}, modalId);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        const errorContainer = document.querySelector(`#${modalId} .error-message`);
+        if (errorContainer) {
+            errorContainer.textContent = 'Ошибка сервера. Пожалуйста, попробуйте ещё раз.';
+        }
+    })
+    .finally(() => {
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+    });
+}
+
+    // Отображение ошибок формы
+    function displayFormErrors(errors, modalId) {
+        for (const field in errors) {
+            const errorElement = document.querySelector(`#${modalId} #${field}-error`);
+            if (errorElement) {
+                errorElement.textContent = errors[field][0];
+            }
+        }
+    }
+
+
+
+
+
+</script>
 </body>
-
 
 <footer class="text-center text-white" style="background-color: #212121; width: 100%; position: relative; left: 0;">
     <!-- Grid container -->
     <div class="container">
-      <!-- Section: Links -->
-      <section class="mt-5">
-        <!-- Grid row-->
-        <div class="row text-center d-flex justify-content-center pt-5">
-          <!-- Grid column -->
-          <div class="col-md-2">
-            <h6 class="text-uppercase font-weight-bold">
-              <a href="{% url 'about' %}" class="text-white">О магазине</a>
-            </h6>
-          </div>
-          <!-- Grid column -->
+        <!-- Section: Links -->
+        <section class="mt-5">
+            <!-- Grid row-->
+            <div class="row text-center d-flex justify-content-center pt-5">
+                <!-- Grid column -->
+                <div class="col-md-2">
+                    <h6 class="text-uppercase font-weight-bold">
+                        <a href="{% url 'about' %}" class="text-white">О магазине</a>
+                    </h6>
+                </div>
+                <!-- Grid column -->
 
-          <!-- Grid column -->
-          <div class="col-md-2">
-            <h6 class="text-uppercase font-weight-bold">
-              <a href="{% url 'warranty' %}" class="text-white">Гарантия и возврат</a>
-            </h6>
-          </div>
-          <!-- Grid column -->
+                <!-- Grid column -->
+                <div class="col-md-2">
+                    <h6 class="text-uppercase font-weight-bold">
+                        <a href="{% url 'warranty' %}" class="text-white">Гарантия и возврат</a>
+                    </h6>
+                </div>
+                <!-- Grid column -->
 
-          <!-- Grid column -->
-          <div class="col-md-2">
-            <h6 class="text-uppercase font-weight-bold">
-              <a href="{% url 'delivery' %}" class="text-white">Доставка</a>
-            </h6>
-          </div>
-          <!-- Grid column -->
+                <!-- Grid column -->
+                <div class="col-md-2">
+                    <h6 class="text-uppercase font-weight-bold">
+                        <a href="{% url 'delivery' %}" class="text-white">Доставка</a>
+                    </h6>
+                </div>
+                <!-- Grid column -->
 
-          <!-- Grid column -->
-          <div class="col-md-2">
-            <h6 class="text-uppercase font-weight-bold">
-              <a href="{% url 'contacts' %}" class="text-white">Контаты</a>
-            </h6>
-          </div>
-          <!-- Grid column -->
+                <!-- Grid column -->
+                <div class="col-md-2">
+                    <h6 class="text-uppercase font-weight-bold">
+                        <a href="{% url 'contacts' %}" class="text-white">Контаты</a>
+                    </h6>
+                </div>
+                <!-- Grid column -->
+            </div>
+            <!-- Grid row-->
+        </section>
+        <!-- Section: Links -->
 
-          <!-- Grid column -->
-          
-          <!-- Grid column -->
-        </div>
-        <!-- Grid row-->
-      </section>
-      <!-- Section: Links -->
+        <hr class="my-5" />
 
-      <hr class="my-5" />
+        <!-- Section: Text -->
+        <section class="mb-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-8">
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
+                        distinctio earum repellat quaerat voluptatibus placeat nam,
+                        commodi optio pariatur est quia magnam eum harum corrupti
+                        dicta, aliquam sequi voluptate quas.
+                    </p>
+                </div>
+            </div>
+        </section>
+        <!-- Section: Text -->
 
-      <!-- Section: Text -->
-      <section class="mb-5">
-        <div class="row d-flex justify-content-center">
-          <div class="col-lg-8">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
-              distinctio earum repellat quaerat voluptatibus placeat nam,
-              commodi optio pariatur est quia magnam eum harum corrupti
-              dicta, aliquam sequi voluptate quas.
-            </p>
-          </div>
-        </div>
-      </section>
-      <!-- Section: Text -->
-
-      <!-- Section: Social -->
-      <section class="text-center mb-5">
-        <a href="" class="text-white me-4">
-          <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href="" class="text-white me-4">
-          <i class="fab fa-twitter"></i>
-        </a>
-        <a href="" class="text-white me-4">
-          <i class="fab fa-google"></i>
-        </a>
-        <a href="" class="text-white me-4">
-          <i class="fab fa-instagram"></i>
-        </a>
-        <a href="" class="text-white me-4">
-          <i class="fab fa-linkedin"></i>
-        </a>
-        <a href="" class="text-white me-4">
-          <i class="fab fa-github"></i>
-        </a>
-      </section>
-      <!-- Section: Social -->
+        <!-- Section: Social -->
+        <section class="text-center mb-5">
+            <a href="" class="text-white me-4">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="" class="text-white me-4">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="" class="text-white me-4">
+                <i class="fab fa-google"></i>
+            </a>
+            <a href="" class="text-white me-4">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="" class="text-white me-4">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="" class="text-white me-4">
+                <i class="fab fa-github"></i>
+            </a>
+        </section>
+        <!-- Section: Social -->
     </div>
     <!-- Grid container -->
 
     <!-- Copyright -->
-    <div
-         class="text-center p-3"
-         style="background-color: rgba(0, 0, 0, 0.7);"
-         >
-      © 2020 Copyright:
-      <a class="text-white" href="https://mdbootstrap.com/"
-         >MDBootstrap.com</a
-        >
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.7);">
+        © 2020 Copyright:
+        <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
     </div>
     <!-- Copyright -->
-  </footer>
-  <!-- Footer -->
-
+</footer>
 </html>
-

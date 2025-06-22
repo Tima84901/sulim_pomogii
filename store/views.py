@@ -5,6 +5,8 @@ from .forms import GpuFilterForm, CpuFilterForm, CoolerFilterForm, PsuFilterForm
 from django.template.loader import render_to_string, select_template
 from django.db.models import Q
 import logging
+
+
 # Create your views here.
 def index(request):
     data = {'title': 'Главная страница'}
@@ -34,7 +36,7 @@ def gpu(request):
 
     if form.is_valid():
         data = form.cleaned_data
-        if data['search']:    qs = qs.filter(product_name__icontains=data['search'])
+
         if data['memory']:    qs = qs.filter(vram__in=data['memory'])
         if data['interface']: qs = qs.filter(pci__in=data['interface'])
         if data['fans']:      qs = qs.filter(brand__in=data['fans'])
@@ -47,37 +49,7 @@ def gpu(request):
 
 
 def cpus(request):
-    # CPU = cpu.objects.all()
-    # form = CpuFilterForm(request.GET or None)
-    # if form.is_valid():
-    #     socket = form.cleaned_data.get('socket')
-    #     cores = form.cleaned_data.get('cores')
-    #     fans = form.cleaned_data.get('fans')
-    #     price_min = form.cleaned_data.get('price_min')
-    #     price_max = form.cleaned_data.get('price_max')
-    #
-    #     if socket:
-    #         CPU = CPU.filter(socket__in=socket)
-    #
-    #     if cores:
-    #         CPU = CPU.filter(cores__in=cores)
-    #
-    #     if fans:
-    #         CPU = CPU.filter(brand__in=fans)
-    #
-    #     if price_min is not None:
-    #         CPU = CPU.filter(price__gte=price_min)
-    #
-    #     if price_max is not None:
-    #         CPU = CPU.filter(price__lte=price_max)
-    #
-    # context = {
-    #     'form': form,
-    #     'cpu': CPU,
-    #     'component': 'cpu',
-    #
-    # }
-    # return render(request, 'store/cpu.html', context)
+
     qs = cpu.objects.all()
     form = CpuFilterForm(request.GET or None)
 
@@ -401,3 +373,8 @@ def component_detail(request, component, pk):
 
     return render(request, template.template.name,
                   {'product': product, 'related': related})
+
+
+
+
+

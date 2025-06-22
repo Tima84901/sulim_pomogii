@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
-
+from django.contrib.contenttypes.models import ContentType
+from store.mixins import WithContentTypeMixin
 class ComponentURLMixin(models.Model):
 
     class Meta:
@@ -10,7 +11,8 @@ class ComponentURLMixin(models.Model):
         return reverse('component_detail',
                        args=[self._meta.model_name, self.pk])
 
-class GPU(ComponentURLMixin, models.Model):
+class GPU(WithContentTypeMixin, ComponentURLMixin, models.Model):
+
     category = models.CharField(max_length=20, null=True)
     product_name = models.CharField(max_length=100, unique=True)  # Идентификатор продукта
     vram = models.CharField(max_length=100)  # Объём видеопамяти в МБ
@@ -27,11 +29,21 @@ class GPU(ComponentURLMixin, models.Model):
     article = models.CharField(null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)  # Цена в валюте
     image = models.ImageField(upload_to='store/images/')
-
+    performance_score = models.PositiveIntegerField(
+        default=0, help_text="Synthetic benchmark index"
+    )
+    length_mm = models.PositiveIntegerField(
+        default=0, help_text="Card length, mm (for case compatibility)"
+    )
+    power_draw_w = models.PositiveIntegerField(
+        default=0, help_text="Typical board power (W)"
+    )
+    ray_tracing_support = models.BooleanField(default=False)
+    release_year = models.PositiveIntegerField(null=True, blank=True)
     def __str__(self):
         return f"{self.brand} {self.gpu_brand} - {self.product_name}"
 
-class cpu(ComponentURLMixin, models.Model):
+class cpu(WithContentTypeMixin, ComponentURLMixin, models.Model):
     category = models.CharField(max_length=20, null=True)
     product_name = models.CharField(max_length=100, unique=True)  # Название продукта
     brand = models.CharField(max_length=100)  # Бренд процессора
@@ -45,13 +57,19 @@ class cpu(ComponentURLMixin, models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)  # Цена в валюте
     tdp = models.IntegerField(null=True)
     image = models.ImageField(upload_to='store/images/', null=True)
+    benchmark_score = models.PositiveIntegerField(
+        default=0, help_text="Synthetic benchmark index"
+    )
+    integrated_graphics = models.BooleanField(default=False)
+    release_year = models.PositiveIntegerField(null=True, blank=True)
+    lithography_nm = models.PositiveIntegerField(null=True, blank=True)
 
 
     def __str__(self):
         return f"{self.brand} {self.product_name}"
 
 
-class Cooler(ComponentURLMixin, models.Model):
+class Cooler(WithContentTypeMixin, ComponentURLMixin, models.Model):
     category = models.CharField(max_length=20, null=True)
     brand = models.CharField(max_length=100)  # Бренд
     product_name = models.CharField(max_length=100)
@@ -65,10 +83,17 @@ class Cooler(ComponentURLMixin, models.Model):
     warranty = models.IntegerField()  # Гарантия в месяцах
     price = models.DecimalField(max_digits=10, decimal_places=2)  # Цена
     image = models.ImageField(upload_to='store/images/', null=True)
+    height_mm = models.PositiveIntegerField(
+        default=0, help_text="Cooler height for case clearance, mm"
+    )
+    noise_level_db = models.PositiveIntegerField(
+        default=0, help_text="Noise level at max RPM, dB"
+    )
+    rgb = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.brand} {self.cooler_type}"
 
-class Memory(ComponentURLMixin, models.Model):
+class Memory(WithContentTypeMixin, ComponentURLMixin, models.Model):
     category = models.CharField(max_length=20, null=True)
     brand = models.CharField(max_length=100)  # Бренд
     memory_type = models.CharField(max_length=100)
@@ -80,11 +105,19 @@ class Memory(ComponentURLMixin, models.Model):
     warranty = models.IntegerField()  # Гарантия в месяцах
     price = models.DecimalField(max_digits=10, decimal_places=2)  # Цена
     image = models.ImageField(upload_to='store/images/', null=True)
-
+    read_speed = models.PositiveIntegerField(
+        default=0, help_text="Sequential read, MB/s"
+    )
+    write_speed = models.PositiveIntegerField(
+        default=0, help_text="Sequential write, MB/s"
+    )
+    tbw = models.PositiveIntegerField(
+        default=0, help_text="Endurance (Total Bytes Written), TB"
+    )
     def __str__(self):
         return f"{self.brand} {self.product_name}"
 
-class Motherboard(ComponentURLMixin, models.Model):
+class Motherboard(WithContentTypeMixin, ComponentURLMixin, models.Model):
     category = models.CharField(max_length=20, null=True)
     brand = models.CharField(max_length=100)  # Бренд
     product_name = models.CharField(max_length=100)  # Название продукта
@@ -96,10 +129,21 @@ class Motherboard(ComponentURLMixin, models.Model):
     warranty = models.IntegerField()  # Гарантия в месяцах
     price = models.DecimalField(max_digits=10, decimal_places=2)  # Цена
     image = models.ImageField(upload_to='store/images/', null=True)
+    max_memory_gb = models.PositiveIntegerField(
+        default=0, help_text="Maximum supported memory, GB"
+    )
+    m2_slots = models.PositiveIntegerField(default=0)
+    pcie_version = models.CharField(
+        max_length=10, default="4.0", help_text="Highest PCIe version supported"
+    )
+    wifi_onboard = models.BooleanField(default=False)
+    max_ram_speed = models.PositiveIntegerField(
+        default=0, help_text="Max RAM speed (MHz) without OC"
+    )
     def __str__(self):
         return f"{self.brand} {self.product_name}"
 
-class PowerSupply(ComponentURLMixin, models.Model):
+class PowerSupply(WithContentTypeMixin, ComponentURLMixin, models.Model):
     category = models.CharField(max_length=20, null=True)
     brand = models.CharField(max_length=100)  # Бренд
     product_name = models.CharField(max_length=100)  # Название продукта
@@ -114,11 +158,21 @@ class PowerSupply(ComponentURLMixin, models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)  # Цена
 
     image = models.ImageField(upload_to='store/images/', null=True)
-
+    efficiency_rating = models.CharField(
+        max_length=20,
+        default="80+ Bronze",
+        help_text="Efficiency certificate label",
+    )
+    modular = models.BooleanField(default=False)
+    pcie_8pin_count = models.PositiveIntegerField(default=0)
+    length_mm = models.PositiveIntegerField(
+        default=0, help_text="PSU length for case compatibility"
+    )
     def __str__(self):
         return f"{self.brand} {self.product_name}"
 
-class Case(ComponentURLMixin, models.Model):
+class Case(WithContentTypeMixin, ComponentURLMixin, models.Model):
+
     category = models.CharField(max_length=20, null=True)
     brand = models.CharField(max_length=100)  # Бренд
     product_name = models.CharField(max_length=100)  # Название продукта
@@ -132,10 +186,28 @@ class Case(ComponentURLMixin, models.Model):
     warranty = models.IntegerField()  # Гарантия в месяцах
     price = models.DecimalField(max_digits=10, decimal_places=2)  # Цена
     image = models.ImageField(upload_to='store/images/', null=True)
+    max_gpu_length_mm = models.PositiveIntegerField(
+        default=0, help_text="Max GPU length supported, mm"
+    )
+    max_cooler_height_mm = models.PositiveIntegerField(
+        default=0, help_text="Max CPU cooler height, mm"
+    )
+    max_psu_length_mm = models.PositiveIntegerField(
+        default=0, help_text="Max PSU length, mm"
+    )
+    drive_slots_25 = models.PositiveIntegerField(
+        default=0, help_text="Number of 2.5'' drive mounts"
+    )
+    drive_slots_35 = models.PositiveIntegerField(
+        default=0, help_text="Number of 3.5'' drive bays"
+    )
+    front_radiator_support = models.BooleanField(default=False)
+    rgb_lighting = models.BooleanField(default=False)
+
     def __str__(self):
         return f"{self.brand} {self.product_name}"
 
-class RAM(ComponentURLMixin, models.Model):
+class RAM(WithContentTypeMixin, ComponentURLMixin, models.Model):
     category = models.CharField(max_length=20, null=True)
     brand = models.CharField(max_length=100)  # Бренд
     product_name = models.CharField(max_length=100)  # Название продукта
@@ -150,5 +222,18 @@ class RAM(ComponentURLMixin, models.Model):
     xmp_support = models.BooleanField(default=False)  # Поддержка XMP
     price = models.DecimalField(max_digits=10, decimal_places=2, default=3000)
     image = models.ImageField(upload_to='store/images/', null=True)
+    latency_cl = models.PositiveIntegerField(
+        default=0, help_text="CAS latency (CL) value"
+    )
+    voltage = models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        default=1.35,
+        help_text="Operating voltage, V",
+    )
+    ecc = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.brand} {self.product_name}"
+
+
+ # JSON правила совместимости

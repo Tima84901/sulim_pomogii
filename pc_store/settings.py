@@ -29,8 +29,12 @@ ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
-
+LOGIN_REDIRECT_URL = 'profile'  # Куда перенаправлять после входа
+LOGOUT_REDIRECT_URL = 'home'    # Куда перенаправлять после выхода
+LOGIN_URL = 'login'
 INSTALLED_APPS = [
+    'recommender',
+    'cart.apps.CartConfig',
     'users',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,6 +46,8 @@ INSTALLED_APPS = [
 
 
 ]
+
+AUTH_USER_MODEL = 'users.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -66,10 +72,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.csrf',
+                'cart.context_processors.cart',
             ],
         },
     },
 ]
+TEMPLATES[0]['DIRS'] += [BASE_DIR / 'store' / 'templates']
 
 WSGI_APPLICATION = 'pc_store.wsgi.application'
 
@@ -136,5 +145,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'users.CustomUser'
 
+
+CSRF_COOKIE_SECURE = False      # TRUE требует HTTPS
+SESSION_COOKIE_SECURE = False
+CSRF_FAILURE_VIEW = 'users.views.csrf_failure'
+CART_SESSION_ID = 'cart'
